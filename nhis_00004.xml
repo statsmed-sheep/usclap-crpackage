@@ -1,0 +1,1263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ipums-ddi-xslt.xsl"?>
+<codeBook xmlns="ddi:codebook:2_5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ddi:codebook:2_5 http://www.ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/codebook.xsd" version="2.5" ID="ddi2-142697_nhis_00004.dat-nhis.ipums.org">
+  <docDscr>
+    <citation>
+      <titlStmt>
+        <titl>Codebook for an Integrated Health Interview Series Data Extract</titl>
+        <subTitl>DDI 2.5 metadata describing the extract file  'nhis_00004.dat'</subTitl>
+        <IDNo>ddi2-142697_nhis_00004.dat-nhis.ipums.org</IDNo>
+      </titlStmt>
+      <rspStmt>
+        <AuthEnty affiliation="University of Minnesota">Minnesota Population Center</AuthEnty>
+      </rspStmt>
+      <prodStmt>
+        <producer abbr="MPC" affiliation="University of Minnesota" role="Documentation">Minnesota Population Center</producer>
+        <prodDate date="2020-05-02">May 2, 2020</prodDate>
+        <prodPlac>Minnesota Population Center, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</prodPlac>
+      </prodStmt>
+      <distStmt>
+        <contact affiliation="University of Minnesota" URI="http://pop.umn.edu">Minnesota Population Center</contact>
+      </distStmt>
+    </citation>
+  </docDscr>
+  <stdyDscr>
+    <citation>
+      <titlStmt>
+        <titl>User Extract nhis_00004.dat</titl>
+      </titlStmt>
+      <rspStmt>
+        <AuthEnty affiliation="University of Minnesota">Minnesota Population Center</AuthEnty>
+      </rspStmt>
+      <prodStmt>
+        <producer abbr="MPC" affiliation="University of Minnesota" role="Documentation">Minnesota Population Center</producer>
+        <prodDate date="2020-05-02">May 2, 2020</prodDate>
+        <prodPlac>Minnesota Population Center, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</prodPlac>
+      </prodStmt>
+      <distStmt>
+        <contact affiliation="University of Minnesota" URI="http://pop.umn.edu">Minnesota Population Center</contact>
+      </distStmt>
+      <serStmt>
+        <serName abbr="nhis">IPUMS NHIS</serName>
+        <serInfo>DOI:10.18128/D070.V6.4</serInfo>
+      </serStmt>
+      <verStmt>
+        <version date="2020-05-02"/>
+      </verStmt>
+    </citation>
+    <stdyInfo>
+      <subject>
+        <topcClas vocab="IPUMS">Core Demographic Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Ethnicity/Nativity Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Total Income and Earnings Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">General Health Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Physical Activity Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Sleep Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Functional Limitation Causes Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Anxiety Variables -- PERSON</topcClas>
+        <topcClas vocab="IPUMS">Depression Variables -- PERSON</topcClas>
+      </subject>
+      <sumDscr ID="sdatref-2441">
+        <timePrd event="single" date="2018">2018</timePrd>
+        <nation abbr="us">United States</nation>
+      </sumDscr>
+      <notes><![CDATA[Additional notes on a sample that is part of this study:  NHIS 2018; regular size
+]]></notes>
+    </stdyInfo>
+    <dataAccs>
+      <useStmt>
+        <confDec required="yes"><![CDATA[The Public Health Service Act (Section 308 (d)) provides that the data collected by the National Center for Health Statistics (NCHS), Centers for Disease Control and Prevention (CDC), may be used only for the purpose of health statistical reporting and analysis. Any effort to determine the identity of any reported case is prohibited by this law. NCHS does all it can to assure that the identity of data subjects cannot be disclosed. All direct identifiers, as well as any characteristics that might lead to identification, are omitted from the data files. Any intentional identification or disclosure of a person or establishment violates the assurances of confidentiality given to the providers of the information. 
+
+Therefore, users will: 
+
+Use the data in these data files for statistical reporting and analysis only. 
+
+Make no use of the identity of any person or establishment discovered inadvertently and advise the Director, NCHS, of any such discovery (301-458-4500). 
+
+Not link these data files with individually identifiable data from other NCHS or non-NCHS data files. 
+
+By using these data, you signify your agreement to comply with the above-stated statutorily-based requirements. ]]></confDec>
+        <contact affiliation="Minnesota Population Center" URI="http://www.nhis.ipums.org/">Integrated Health Interview Series</contact>
+        <citReq><![CDATA[Publications and research reports based on the NHIS database must cite it appropriately.  The citation is as follows:
+
+Lynn A. Blewett,  Julia A. Rivera Drew,  Miriam L. King and Kari C.W. Williams. IPUMS Health  Surveys: National Health Interview Survey, Version 6.4 [dataset]. Minneapolis, MN: IPUMS, 2019. https://doi.org/10.18128/D070.V6.4
+
+If possible, citations should also include the URL for the NHIS site:  http://www.nhis.ipums.org.
+
+Please see http://www.nhis.ipums.org/nhis/citation.shtml for precise formatting of the citation.]]></citReq>
+        <conditions><![CDATA[The Public Health Service Act (Section 308 (d)) provides that the data collected by the National Center for Health Statistics (NCHS), Centers for Disease Control and Prevention (CDC), may be used only for the purpose of health statistical reporting and analysis. Any effort to determine the identity of any reported case is prohibited by this law. NCHS does all it can to assure that the identity of data subjects cannot be disclosed. All direct identifiers, as well as any characteristics that might lead to identification, are omitted from the data files. Any intentional identification or disclosure of a person or establishment violates the assurances of confidentiality given to the providers of the information. 
+
+Therefore, users must: 
+
+Use the data in these data files for statistical reporting and analysis only. 
+
+Make no use of the identity of any person or establishment discovered inadvertently and advise the Director, NCHS, of any such discovery (301-458-4500). 
+
+Not link these data files with individually identifiable data from other NCHS or non-NCHS data files. 
+
+By using these data, you signify your agreement to comply with the above-stated statutorily-based requirements. 
+
+Furthermore, users of NHIS data must agree to abide by the conditions of use. Users must agree to the following conditions:
+  
+  
+(1) Use the data in these data files for statistical reporting and analysis only 
+
+(2) Make no use of the identity of any person or establishment discovered inadvertently and advise the Director of NCHS of any such discovery (301-458-4500) 
+
+(3) Do not link these data with individually-identifiable data from NCHS or non-NCHS data files 
+
+(4) No fees may be charged for use or distribution of the data.  All persons are granted a limited license to use and distribute these data, but you may not charge a fee for the data if you distribute them to others. 
+
+(5) Cite the NHIS appropriately.  Publications and research reports based on the database must cite it appropriately.  Please see http://www.nhis.ipums.org/nhis/citation.shtml
+
+(6) NHIS cannot be used to study small geographic areas.  The smallest geographical areas identified in the NHIS are regions (groups of states) and a limited number of metropolitan areas.
+
+(7) This system provides individual-level data only.  The NHIS Data Extraction System will not produce tables. You will need to use a statistical software package, such as Stata, SAS, or SPSS, to analyze the downloaded data.  Alternatively, you may use the NHIS-SDA tabulator to produce tables online, without making a data extract.]]></conditions>
+        <disclaimer>The user of the data acknowledges that the original collector of the data, the authorized distributor of the data, and the relevant funding agency bear no responsibility for use of the data or for interpretations or inferences based upon such uses.</disclaimer>
+      </useStmt>
+    </dataAccs>
+    <notes><![CDATA[User-provided description:  Extract for sleep, depression, and diabetes analysis]]></notes>
+    <notes>This extract is a revision of the user's previous extract, number 3.</notes>
+  </stdyDscr>
+  <fileDscr ID="ExtractData">
+    <fileTxt>
+      <fileName>nhis_00004.dat</fileName>
+      <fileCont>Microdata records</fileCont>
+      <fileStrc type="rectangular">
+      </fileStrc>
+      <fileType charset="ISO-8859-1">ISO-8859-1 data file</fileType>
+      <format>fixed length fields</format>
+      <filePlac>Minnesota Population Center, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</filePlac>
+    </fileTxt>
+  </fileDscr>
+  <dataDscr>
+    <var ID="AGE" files="ExtractData" name="AGE" intrvl="contin" dcml="0">
+      <location StartPos="1" width="2" EndPos="2"/>
+      <labl>Age</labl>
+      <txt><![CDATA[AGE reports the individual's age, in years since last birthday.  Age is not coded as "unknown" for any persons included in the IPUMS NHIS data.  As the public use file's codebooks for 1998 forward state, "Because age is an important variable for instrument check items and in developing the weights, all respondents must have data on age."]]></txt>
+      <codInstr><![CDATA[
+
+AGE is a 2-digit-numeric variable.
+
+85:	Top code for 85 years or older (1963-1968 and 1997-forward)
+90:	Top code for 90 years or older (1969-1995)
+99:	Top code for 99 years or older (1996 only)]]></codInstr>
+      <concept vocab="IPUMS">Core Demographic Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="SEX" files="ExtractData" name="SEX" intrvl="discrete" dcml="0">
+      <location StartPos="3" width="1" EndPos="3"/>
+      <labl>Sex</labl>
+      <txt><![CDATA[SEX indicates whether the person was male or female.]]></txt>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Male</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Female</labl>
+      </catgry>
+      <concept vocab="IPUMS">Core Demographic Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="RACEA" files="ExtractData" name="RACEA" intrvl="discrete" dcml="0">
+      <location StartPos="4" width="3" EndPos="6"/>
+      <labl>Main Racial Background (Pre-1997 Revised OMB Standards), self-reported or interviewer reported</labl>
+      <txt><![CDATA[RACEA incorporates information from RACEID and RACESR. Accordingly, RACEA reports, for 1968-1977, the interviewer-identified race of all persons, and for 1978 forward, the self-reported, main racial background of all persons using the pre-1997 Office of Management and Budget's (OMB's) Statistical Policy Directive No. 15 (Race and Ethnic Standards for Federal Statistics and Administrative Reporting). More information on the OMB's Directive 15 can be found at Standards for the Classification of Federal Data on Race and Ethnicity [URL omitted from DDI.].]]></txt>
+      <catgry>
+        <catValu>100</catValu>
+        <labl>White</labl>
+      </catgry>
+      <catgry>
+        <catValu>200</catValu>
+        <labl>Black/African-American</labl>
+      </catgry>
+      <catgry>
+        <catValu>300</catValu>
+        <labl>Aleut, Alaskan Native, or American Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>310</catValu>
+        <labl>Alaskan Native or American Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>320</catValu>
+        <labl>Alaskan Native/Eskimo</labl>
+      </catgry>
+      <catgry>
+        <catValu>330</catValu>
+        <labl>Aleut</labl>
+      </catgry>
+      <catgry>
+        <catValu>340</catValu>
+        <labl>American Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>400</catValu>
+        <labl>Asian or Pacific Islander</labl>
+      </catgry>
+      <catgry>
+        <catValu>410</catValu>
+        <labl>Asian</labl>
+      </catgry>
+      <catgry>
+        <catValu>411</catValu>
+        <labl>Chinese</labl>
+      </catgry>
+      <catgry>
+        <catValu>412</catValu>
+        <labl>Filipino</labl>
+      </catgry>
+      <catgry>
+        <catValu>413</catValu>
+        <labl>Korean</labl>
+      </catgry>
+      <catgry>
+        <catValu>414</catValu>
+        <labl>Vietnamese</labl>
+      </catgry>
+      <catgry>
+        <catValu>415</catValu>
+        <labl>Japanese</labl>
+      </catgry>
+      <catgry>
+        <catValu>416</catValu>
+        <labl>Asian Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>420</catValu>
+        <labl>Pacific Islander</labl>
+      </catgry>
+      <catgry>
+        <catValu>421</catValu>
+        <labl>Hawaiian</labl>
+      </catgry>
+      <catgry>
+        <catValu>422</catValu>
+        <labl>Samoan</labl>
+      </catgry>
+      <catgry>
+        <catValu>423</catValu>
+        <labl>Guamanian</labl>
+      </catgry>
+      <catgry>
+        <catValu>430</catValu>
+        <labl>Other Asian or Pacific Islander</labl>
+      </catgry>
+      <catgry>
+        <catValu>431</catValu>
+        <labl>Other Asian or Pacific Islander (1992-1995)</labl>
+      </catgry>
+      <catgry>
+        <catValu>432</catValu>
+        <labl>Other Asian or Pacific Islander (1996)</labl>
+      </catgry>
+      <catgry>
+        <catValu>433</catValu>
+        <labl>Other Asian or Pacific Islander (1997-1998)</labl>
+      </catgry>
+      <catgry>
+        <catValu>434</catValu>
+        <labl>Other Asian (1999 forward)</labl>
+      </catgry>
+      <catgry>
+        <catValu>500</catValu>
+        <labl>Other Race</labl>
+      </catgry>
+      <catgry>
+        <catValu>510</catValu>
+        <labl>Other Race (1963-1977)</labl>
+      </catgry>
+      <catgry>
+        <catValu>520</catValu>
+        <labl>Other Race (1978)</labl>
+      </catgry>
+      <catgry>
+        <catValu>530</catValu>
+        <labl>Other Race (1979-1991)</labl>
+      </catgry>
+      <catgry>
+        <catValu>540</catValu>
+        <labl>Other Race (1992-1995)</labl>
+      </catgry>
+      <catgry>
+        <catValu>550</catValu>
+        <labl>Other Race (1996)</labl>
+      </catgry>
+      <catgry>
+        <catValu>560</catValu>
+        <labl>Other Race (1997-1998)</labl>
+      </catgry>
+      <catgry>
+        <catValu>570</catValu>
+        <labl>Other Race (1999-2002)</labl>
+      </catgry>
+      <catgry>
+        <catValu>580</catValu>
+        <labl>Primary Race not releasable</labl>
+      </catgry>
+      <catgry>
+        <catValu>600</catValu>
+        <labl>Multiple Race, No Primary Race Selected</labl>
+      </catgry>
+      <catgry>
+        <catValu>610</catValu>
+        <labl>Multiple Race, including Asian, excluding Black and White</labl>
+      </catgry>
+      <catgry>
+        <catValu>611</catValu>
+        <labl>Multiple Race, including Asian and Black, excluding White</labl>
+      </catgry>
+      <catgry>
+        <catValu>612</catValu>
+        <labl>Multiple Race, including Asian and White, excluding Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>613</catValu>
+        <labl>Multiple Race, including Black, excluding Asian and White</labl>
+      </catgry>
+      <catgry>
+        <catValu>614</catValu>
+        <labl>Multiple Race, including Black and White, excluding Asian</labl>
+      </catgry>
+      <catgry>
+        <catValu>615</catValu>
+        <labl>Multiple Race, including White, excluding Asian and Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>616</catValu>
+        <labl>Multiple Race, including Asian, White, and Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>617</catValu>
+        <labl>Multiple Race, excluding Asian, White, and Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>900</catValu>
+        <labl>Unknown</labl>
+      </catgry>
+      <catgry>
+        <catValu>970</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>980</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>990</catValu>
+        <labl>Unknown (1997 forward: Don't know)</labl>
+      </catgry>
+      <concept vocab="IPUMS">Ethnicity/Nativity Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="INCFAM07ON" files="ExtractData" name="INCFAM07ON" intrvl="discrete" dcml="0">
+      <location StartPos="7" width="2" EndPos="8"/>
+      <labl>Total combined family income (2007+)</labl>
+      <txt><![CDATA[For all persons, INCFAM07ON provides total grouped family income using an income bracket methodology introduced in 2007. Responses are reported in nominal dollars and have not been adjusted for inflation.
+
+
+Starting with the 2007 NHIS, the income amount follow-up questions that had been in place since 1997 were replaced with a series of unfolding bracket questions. The unfolding bracket method asked a series of closed-ended income range questions (e.g., "Is it less than $50,000?") if the respondent did not provide an answer to the exact income amount question. The closed-ended income range questions were constructed so that each successive question establishes a smaller range for the amount of the family's income.
+]]></txt>
+      <catgry>
+        <catValu>10</catValu>
+        <labl>$0 - $49,999 (no further detail)</labl>
+      </catgry>
+      <catgry>
+        <catValu>11</catValu>
+        <labl>$0 - $34,999</labl>
+      </catgry>
+      <catgry>
+        <catValu>12</catValu>
+        <labl>$35,000 - $49,999</labl>
+      </catgry>
+      <catgry>
+        <catValu>20</catValu>
+        <labl>$50,000  and over (no further detail; available 2007-2013)</labl>
+      </catgry>
+      <catgry>
+        <catValu>21</catValu>
+        <labl>$50,000 - $99,999 (no further detail)</labl>
+      </catgry>
+      <catgry>
+        <catValu>22</catValu>
+        <labl>$50,000 - $74,999</labl>
+      </catgry>
+      <catgry>
+        <catValu>23</catValu>
+        <labl>$75,000 - $99,999</labl>
+      </catgry>
+      <catgry>
+        <catValu>24</catValu>
+        <labl>$100,000 and over</labl>
+      </catgry>
+      <catgry>
+        <catValu>96</catValu>
+        <labl>Undefined</labl>
+      </catgry>
+      <catgry>
+        <catValu>99</catValu>
+        <labl>Unknown</labl>
+      </catgry>
+      <concept vocab="IPUMS">Total Income and Earnings Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="HEALTH" files="ExtractData" name="HEALTH" intrvl="discrete" dcml="0">
+      <location StartPos="9" width="1" EndPos="9"/>
+      <labl>Health status</labl>
+      <txt><![CDATA[HEALTH rates an individual's general health (as self-reported by the person in question or evaluated by a family member] on a four-point (1972-81) or five-point (1982 forward) Likert scale, ranging from "excellent" to "poor" (along with an unrated "unknown" category).
+
+For 1997 forward, HSTATYR reports whether the health status of sample adults and sample children was better, worse, or about the same as one year ago.]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Excellent</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Very Good</labl>
+      </catgry>
+      <catgry>
+        <catValu>3</catValu>
+        <labl>Good</labl>
+      </catgry>
+      <catgry>
+        <catValu>4</catValu>
+        <labl>Fair</labl>
+      </catgry>
+      <catgry>
+        <catValu>5</catValu>
+        <labl>Poor</labl>
+      </catgry>
+      <catgry>
+        <catValu>7</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>8</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>9</catValu>
+        <labl>Unknown-don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">General Health Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="BMI" files="ExtractData" name="BMI" intrvl="contin" dcml="2">
+      <location StartPos="10" width="4" EndPos="13"/>
+      <labl>Body mass index</labl>
+      <txt><![CDATA[For sample adults, BMI reports the Body Mass Index, a measure of body fat based on height and weight that applies to adult men and women.  
+
+Calculation of BMI
+
+The Codebooks for 1997 forward provide information about the calculation of BMI by the National Center for Health Statistics (NCHS) and about the interpretation of the results.  
+
+For 2004-2005, this information was phrased as follows:
+
+BMI was calculated using the inhouse version of the height and weight variables, which contain the greater range of height and weight values than are available on the public use file.  BMI values shown [as the range of values reported in the codebook] are theoretical, not actual ranges.  BMI = [Weight(kg)/[Height(m) squared]], rounded to 2 decimal places.  Conversion factors: 1 kg = 2.205 pounds; 1 meter (m) = 39.37 inches.  For both men and women, underweight is BMI less than 18.5; healthy weight is BMI 18.5 to less than 25; overweight is BMI greater than or equal to 25; obesity is BMI greater than or equal to 30.
+
+
+The wording in the Codebooks for 1997-2003 was slightly different, but the substantive meaning was the same as in the text quoted above.  
+
+The conversion factors for 2006 forward were slightly different, with 1 kilogram defined as 2.20462 pounds and 1 meter defined as 39.37008 inches.
+ 
+
+As the basis for BMI, the survey collected information about the individual's height and weight.  For height, interviewers asked, "How tall are you without shoes?"; for weight, interviewers asked, "How much do you weigh without shoes?"  These results are reported in HEIGHT and WEIGHT, respectively.
+
+In the public use files, for 1997 forward, the heights and weights of people with unusually high or low values were suppressed, to protect respondents' confidentiality.   As mentioned in the quote above, to calculate BMI, the NCHS used the full range of weight and height values for respondents, not the restricted range of values included in the public use data files.]]></txt>
+      <codInstr><![CDATA[
+BMI is a variable with four columns and two implied decimal places.
+
+0000:	NIU
+9980:	99.8+
+9999:	Unknown]]></codInstr>
+      <concept vocab="IPUMS">General Health Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="MOD10FWK" files="ExtractData" name="MOD10FWK" intrvl="contin" dcml="0">
+      <location StartPos="14" width="2" EndPos="15"/>
+      <labl>Frequency of moderate activity 10+ minutes: Times per week</labl>
+      <txt><![CDATA[MOD10FWK is a recoded variable created by the staff at the National Center for Health Statistics that draws upon the information in MOD10FTP (Frequency of moderate activity 10+ minutes: Time period) and MOD10FNO (Frequency of moderate activity 10+ minutes: Number of units) and reports the frequency of light or moderate leisure-time physical activities in terms of a single time unit, times per week.
+
+Light or moderate activities are described in the survey question itself as activities that "cause only light sweating or a slight to moderate increase in breathing or heart rate."  The Field Representative's Manuals for 1997 forward provide examples of light or moderate leisure-time physical activities, although these examples were not routinely shared with respondents.  These examples include leisurely walking or bicycling, slow swimming or dancing, and simple gardening.
+
+For general discussion of how and why the NHIS collected information on adult physical activity for 1997 forward, see VIG10FNO.]]></txt>
+      <codInstr><![CDATA[
+MOD10FWK is a 2-digit-numeric variable.
+
+00:	Not in Universe
+94:	Less than once per week
+95:	Never
+96:	Unable to do this activity
+97:	Unknown-refused
+98:	Unknown-not ascertained
+99:	Unknown-don't know]]></codInstr>
+      <concept vocab="IPUMS">Physical Activity Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="VIG10FWK" files="ExtractData" name="VIG10FWK" intrvl="contin" dcml="0">
+      <location StartPos="16" width="2" EndPos="17"/>
+      <labl>Frequency of vigorous activity 10+ minutes: Times per week</labl>
+      <txt><![CDATA[VIG10FWK is a recoded variable created by the staff at the National Center for Health Statistics that draws upon the information in VIG10FTP (Frequency of vigorous activity 10+ minutes: Time period) and VIG10FNO (Frequency of vigorous activity 10+ minutes: Number of units) and reports the frequency of vigorous leisure-time physical activities in terms of a single time unit, times per week.
+
+Vigorous leisure-time activities are described in the survey question itself as activities that "cause heavy sweating or large increases in breathing or heart rate."  The Field Representative's Manuals for 1997 forward provide examples of vigorous activities, although these examples were not routinely shared with respondents.  These examples include fast walking, fast bicycling, jogging, strenuous swimming or sports play, vigorous aerobic dance, and strenuous gardening.
+
+For general discussion of how and why the NHIS collected information on adult physical activity for 1997 forward, see VIG10FNO.]]></txt>
+      <codInstr><![CDATA[
+
+00: Not in Universe
+94: Less than once per week
+95: Never
+96: Unable to do moderate/vigorous activity
+97: Unknown-refused
+98: Unknown-not ascertained
+99: Unknown-don't know]]></codInstr>
+      <concept vocab="IPUMS">Physical Activity Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="STRONGFWK" files="ExtractData" name="STRONGFWK" intrvl="contin" dcml="0">
+      <location StartPos="18" width="2" EndPos="19"/>
+      <labl>Frequency of strengthening activity: Times per week</labl>
+      <txt><![CDATA[STRONGFWK is a recoded variable created by the staff at the National Center for Health Statistics that draws upon the information in STRONGFTP (Frequency of strengthening activity: Time period) and STRONGFNO (Frequency of strengthening activity: Number of units) and reports the frequency of strengthening leisure-time physical activities in terms of a single time unit, times per week.
+
+Definitions
+
+Leisure-time strengthening activities are described in the survey question itself as activities "specifically designed to strengthen your muscles such as lifting weights or doing calisthenics."
+
+The Field Representative's Manuals for 1997 forward provide other examples of strengthening activities, although these examples were not routinely shared with respondents.  These examples include "activities that require strenuous muscle contractions," such as resistance training, push-ups, and sit-ups.
+
+
+Data Collection
+
+Interviewers asked about the frequency of strengthening leisure-time physical activities after collecting information about vigorous and light or moderate leisure-time physical activities.  They directed respondents to "include all such [strengthening] activities, even if you have mentioned them before."  
+
+Strengthening activities could be done at either a "moderate" or a "vigorous" pace, and the time spent doing strengthening leisure-time activities was thus already incorporated in the duration variables for moderate and/or vigorous leisure-time physical activity. Accordingly, interviewers did not ask about the amount of time respondents spent doing strengthening activities.
+
+For further discussion of data collection on leisure-time physical activity in general for 1997 forward, see VIG10FNO (Frequency of vigorous activity 10+ minutes: Number of units).
+]]></txt>
+      <codInstr><![CDATA[
+STRONGFWK is a 2-digit-numeric variable.
+
+00:	Not in Universe
+94:	Less than once per week
+95:	Never
+96:	Unable to do this activity
+97:	Unknown-refused
+98:	Unknown-not ascertained
+99:	Unknown-don't know]]></codInstr>
+      <concept vocab="IPUMS">Physical Activity Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="HRSLEEP" files="ExtractData" name="HRSLEEP" intrvl="discrete" dcml="0">
+      <location StartPos="20" width="2" EndPos="21"/>
+      <labl>Usual hours sleep per day</labl>
+      <txt><![CDATA[This variable reports how many hours, on average, the respondent sleeps per day.  In 1977 and 1983, respondents were asked about hours slept "at night" while for all later years, the survey asked about hours slept in a 24 hour period.  
+
+However, the 1977  Field Representative's Manual  notes that if the person works at night, "hours of sleep" referred to the person's normal sleeping hours. Similarly, the 1983 Manual defines "sleep at night" to be the number of hours usually slept, "even if the sample person sleeps during the day."
+
+For surveys prior to 2004, interviewers were instructed to write down responses verbatim.  From 2004 forward, interviewers were instructed to report the hours of sleep in whole numbers, rounding values of 30 minutes or more UP to the nearest hour or otherwise rounding down.  
+
+IPUMS NHIS recodes the values from the earlier surveys into whole number values, following the same rules as 2004 forward.]]></txt>
+      <catgry>
+        <catValu>00</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>01</catValu>
+        <labl>1 hour (1990: 0 or 1 hour)</labl>
+      </catgry>
+      <catgry>
+        <catValu>02</catValu>
+        <labl>2 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>03</catValu>
+        <labl>3 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>04</catValu>
+        <labl>4 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>05</catValu>
+        <labl>5 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>06</catValu>
+        <labl>6 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>07</catValu>
+        <labl>7 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>08</catValu>
+        <labl>8 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>09</catValu>
+        <labl>9 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>10</catValu>
+        <labl>10 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>11</catValu>
+        <labl>11 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>12</catValu>
+        <labl>12 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>13</catValu>
+        <labl>13 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>14</catValu>
+        <labl>14 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>15</catValu>
+        <labl>15 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>16</catValu>
+        <labl>16 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>17</catValu>
+        <labl>17 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>18</catValu>
+        <labl>18 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>19</catValu>
+        <labl>19 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>20</catValu>
+        <labl>20 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>21</catValu>
+        <labl>21 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>22</catValu>
+        <labl>22 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>23</catValu>
+        <labl>23 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>24</catValu>
+        <labl>24 hours</labl>
+      </catgry>
+      <catgry>
+        <catValu>25</catValu>
+        <labl>Less than 1 hour</labl>
+      </catgry>
+      <catgry>
+        <catValu>97</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>98</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>99</catValu>
+        <labl>Unknown-don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">Sleep Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="FLDIABETC" files="ExtractData" name="FLDIABETC" intrvl="discrete" dcml="0">
+      <location StartPos="22" width="1" EndPos="22"/>
+      <labl>Chronic status of functionally limiting diabetes</labl>
+      <txt><![CDATA[For sample adults who, without using special equipment, have at least a little difficulty with one or more functional activity (FLANY), and for whom diabetes was reported as a condition causing any activity limitation (FLDIABET), FLDIABETC reports whether the condition status was chronic.  Diabetes is a condition consistently coded by the National Center for Health Statistics (NCHS) as "chronic," regardless of the time since diagnosis.
+
+Definition of chronic condition
+For the most part, conditions that have lasted 3 months or longer (or were diagnosed at least 3 months prior to the interview) are classified as "chronic" in the National Health Interview Survey.  Those conditions that have lasted less than three months are generally considered "not chronic" (or acute).  However, some conditions are considered "chronic" by definition, regardless of the length of time since diagnosis.  
+
+
+As the NHIS Survey Descriptions for 2002 forward explain:
+
+Conditions that are generally not cured, once acquired ... such as heart disease, diabetes, and birth defects ... are considered chronic, while ... other conditions must have been present for three months or longer to be considered chronic.
+
+Correspondence with the NCHS staff  provided the further information that the following conditions were considered chronic regardless of the amount of time the person had the condition: arthritis/rheumatism; birth defect; cancer; diabetes; heart problem; hypertension; missing limb or finger; old age; mental retardation; senility; stroke; and other developmental problem.  These "instant chronic" conditions might be treated and may not cause problems, but they do not actually disappear with time, as might be the case for other conditions, such as a bone fracture. 
+]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Not chronic</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Chronic</labl>
+      </catgry>
+      <catgry>
+        <catValu>9</catValu>
+        <labl>Unknown if chronic</labl>
+      </catgry>
+      <concept vocab="IPUMS">Functional Limitation Causes Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="FLDIABETNO" files="ExtractData" name="FLDIABETNO" intrvl="discrete" dcml="0">
+      <location StartPos="23" width="2" EndPos="24"/>
+      <labl>Duration of functionally limiting diabetes: Number of units</labl>
+      <txt><![CDATA[For Sample Adults age 18+ who, without using special equipment, had any difficulty with one or more functional activities (FLANY), and for whom diabetes was reported as a condition causing a functional activity limitation (FLDIABET), FLDIABETNO reports the number of time units the respondent stated when reporting the duration of the diabetes.
+
+Data on the duration of the limiting diabetes were collected via the question, "How long have you had [diabetes]?"  Respondents could answer this open-ended question using the time unit of their choice (i.e., days, weeks, months, years, or since birth).  The original responses to the question are reported in two complementary variables, FLDIABETTP (which specifies the time unit) and FLDIABETNO (which reports the number of such units).  As noted in the Codebooks for 1997 forward, "years are topcoded at 85."  For the NHIS public use files, the National Center for Health Statistics (NCHS) recoded the results from these two variables to create two other variables using standard time units: years (FLDIABETY) and groups of months (FLDIABETMO).]]></txt>
+      <catgry>
+        <catValu>00</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>01</catValu>
+        <labl>1</labl>
+      </catgry>
+      <catgry>
+        <catValu>02</catValu>
+        <labl>2</labl>
+      </catgry>
+      <catgry>
+        <catValu>03</catValu>
+        <labl>3</labl>
+      </catgry>
+      <catgry>
+        <catValu>04</catValu>
+        <labl>4</labl>
+      </catgry>
+      <catgry>
+        <catValu>05</catValu>
+        <labl>5</labl>
+      </catgry>
+      <catgry>
+        <catValu>06</catValu>
+        <labl>6</labl>
+      </catgry>
+      <catgry>
+        <catValu>07</catValu>
+        <labl>7</labl>
+      </catgry>
+      <catgry>
+        <catValu>08</catValu>
+        <labl>8</labl>
+      </catgry>
+      <catgry>
+        <catValu>09</catValu>
+        <labl>9</labl>
+      </catgry>
+      <catgry>
+        <catValu>10</catValu>
+        <labl>10</labl>
+      </catgry>
+      <catgry>
+        <catValu>11</catValu>
+        <labl>11</labl>
+      </catgry>
+      <catgry>
+        <catValu>12</catValu>
+        <labl>12</labl>
+      </catgry>
+      <catgry>
+        <catValu>13</catValu>
+        <labl>13</labl>
+      </catgry>
+      <catgry>
+        <catValu>14</catValu>
+        <labl>14</labl>
+      </catgry>
+      <catgry>
+        <catValu>15</catValu>
+        <labl>15</labl>
+      </catgry>
+      <catgry>
+        <catValu>16</catValu>
+        <labl>16</labl>
+      </catgry>
+      <catgry>
+        <catValu>17</catValu>
+        <labl>17</labl>
+      </catgry>
+      <catgry>
+        <catValu>18</catValu>
+        <labl>18</labl>
+      </catgry>
+      <catgry>
+        <catValu>19</catValu>
+        <labl>19</labl>
+      </catgry>
+      <catgry>
+        <catValu>20</catValu>
+        <labl>20</labl>
+      </catgry>
+      <catgry>
+        <catValu>21</catValu>
+        <labl>21</labl>
+      </catgry>
+      <catgry>
+        <catValu>22</catValu>
+        <labl>22</labl>
+      </catgry>
+      <catgry>
+        <catValu>23</catValu>
+        <labl>23</labl>
+      </catgry>
+      <catgry>
+        <catValu>24</catValu>
+        <labl>24</labl>
+      </catgry>
+      <catgry>
+        <catValu>25</catValu>
+        <labl>25</labl>
+      </catgry>
+      <catgry>
+        <catValu>26</catValu>
+        <labl>26</labl>
+      </catgry>
+      <catgry>
+        <catValu>27</catValu>
+        <labl>27</labl>
+      </catgry>
+      <catgry>
+        <catValu>28</catValu>
+        <labl>28</labl>
+      </catgry>
+      <catgry>
+        <catValu>29</catValu>
+        <labl>29</labl>
+      </catgry>
+      <catgry>
+        <catValu>30</catValu>
+        <labl>30</labl>
+      </catgry>
+      <catgry>
+        <catValu>31</catValu>
+        <labl>31</labl>
+      </catgry>
+      <catgry>
+        <catValu>32</catValu>
+        <labl>32</labl>
+      </catgry>
+      <catgry>
+        <catValu>33</catValu>
+        <labl>33</labl>
+      </catgry>
+      <catgry>
+        <catValu>34</catValu>
+        <labl>34</labl>
+      </catgry>
+      <catgry>
+        <catValu>35</catValu>
+        <labl>35</labl>
+      </catgry>
+      <catgry>
+        <catValu>36</catValu>
+        <labl>36</labl>
+      </catgry>
+      <catgry>
+        <catValu>37</catValu>
+        <labl>37</labl>
+      </catgry>
+      <catgry>
+        <catValu>38</catValu>
+        <labl>38</labl>
+      </catgry>
+      <catgry>
+        <catValu>39</catValu>
+        <labl>39</labl>
+      </catgry>
+      <catgry>
+        <catValu>40</catValu>
+        <labl>40</labl>
+      </catgry>
+      <catgry>
+        <catValu>41</catValu>
+        <labl>41</labl>
+      </catgry>
+      <catgry>
+        <catValu>42</catValu>
+        <labl>42</labl>
+      </catgry>
+      <catgry>
+        <catValu>43</catValu>
+        <labl>43</labl>
+      </catgry>
+      <catgry>
+        <catValu>44</catValu>
+        <labl>44</labl>
+      </catgry>
+      <catgry>
+        <catValu>45</catValu>
+        <labl>45</labl>
+      </catgry>
+      <catgry>
+        <catValu>46</catValu>
+        <labl>46</labl>
+      </catgry>
+      <catgry>
+        <catValu>47</catValu>
+        <labl>47</labl>
+      </catgry>
+      <catgry>
+        <catValu>48</catValu>
+        <labl>48</labl>
+      </catgry>
+      <catgry>
+        <catValu>49</catValu>
+        <labl>49</labl>
+      </catgry>
+      <catgry>
+        <catValu>50</catValu>
+        <labl>50</labl>
+      </catgry>
+      <catgry>
+        <catValu>51</catValu>
+        <labl>51</labl>
+      </catgry>
+      <catgry>
+        <catValu>52</catValu>
+        <labl>52</labl>
+      </catgry>
+      <catgry>
+        <catValu>53</catValu>
+        <labl>53</labl>
+      </catgry>
+      <catgry>
+        <catValu>54</catValu>
+        <labl>54</labl>
+      </catgry>
+      <catgry>
+        <catValu>55</catValu>
+        <labl>55</labl>
+      </catgry>
+      <catgry>
+        <catValu>56</catValu>
+        <labl>56</labl>
+      </catgry>
+      <catgry>
+        <catValu>57</catValu>
+        <labl>57</labl>
+      </catgry>
+      <catgry>
+        <catValu>58</catValu>
+        <labl>58</labl>
+      </catgry>
+      <catgry>
+        <catValu>59</catValu>
+        <labl>59</labl>
+      </catgry>
+      <catgry>
+        <catValu>60</catValu>
+        <labl>60</labl>
+      </catgry>
+      <catgry>
+        <catValu>61</catValu>
+        <labl>61</labl>
+      </catgry>
+      <catgry>
+        <catValu>62</catValu>
+        <labl>62</labl>
+      </catgry>
+      <catgry>
+        <catValu>63</catValu>
+        <labl>63</labl>
+      </catgry>
+      <catgry>
+        <catValu>64</catValu>
+        <labl>64</labl>
+      </catgry>
+      <catgry>
+        <catValu>65</catValu>
+        <labl>65</labl>
+      </catgry>
+      <catgry>
+        <catValu>66</catValu>
+        <labl>66</labl>
+      </catgry>
+      <catgry>
+        <catValu>67</catValu>
+        <labl>67</labl>
+      </catgry>
+      <catgry>
+        <catValu>68</catValu>
+        <labl>68</labl>
+      </catgry>
+      <catgry>
+        <catValu>69</catValu>
+        <labl>69</labl>
+      </catgry>
+      <catgry>
+        <catValu>70</catValu>
+        <labl>70</labl>
+      </catgry>
+      <catgry>
+        <catValu>71</catValu>
+        <labl>71</labl>
+      </catgry>
+      <catgry>
+        <catValu>72</catValu>
+        <labl>72</labl>
+      </catgry>
+      <catgry>
+        <catValu>73</catValu>
+        <labl>73</labl>
+      </catgry>
+      <catgry>
+        <catValu>74</catValu>
+        <labl>74</labl>
+      </catgry>
+      <catgry>
+        <catValu>75</catValu>
+        <labl>75</labl>
+      </catgry>
+      <catgry>
+        <catValu>76</catValu>
+        <labl>76</labl>
+      </catgry>
+      <catgry>
+        <catValu>77</catValu>
+        <labl>77</labl>
+      </catgry>
+      <catgry>
+        <catValu>78</catValu>
+        <labl>78</labl>
+      </catgry>
+      <catgry>
+        <catValu>79</catValu>
+        <labl>79</labl>
+      </catgry>
+      <catgry>
+        <catValu>80</catValu>
+        <labl>80</labl>
+      </catgry>
+      <catgry>
+        <catValu>81</catValu>
+        <labl>81</labl>
+      </catgry>
+      <catgry>
+        <catValu>82</catValu>
+        <labl>82</labl>
+      </catgry>
+      <catgry>
+        <catValu>83</catValu>
+        <labl>83</labl>
+      </catgry>
+      <catgry>
+        <catValu>84</catValu>
+        <labl>84</labl>
+      </catgry>
+      <catgry>
+        <catValu>85</catValu>
+        <labl>85</labl>
+      </catgry>
+      <catgry>
+        <catValu>86</catValu>
+        <labl>86</labl>
+      </catgry>
+      <catgry>
+        <catValu>87</catValu>
+        <labl>87</labl>
+      </catgry>
+      <catgry>
+        <catValu>88</catValu>
+        <labl>88</labl>
+      </catgry>
+      <catgry>
+        <catValu>89</catValu>
+        <labl>89</labl>
+      </catgry>
+      <catgry>
+        <catValu>90</catValu>
+        <labl>90</labl>
+      </catgry>
+      <catgry>
+        <catValu>91</catValu>
+        <labl>91</labl>
+      </catgry>
+      <catgry>
+        <catValu>92</catValu>
+        <labl>92</labl>
+      </catgry>
+      <catgry>
+        <catValu>93</catValu>
+        <labl>93</labl>
+      </catgry>
+      <catgry>
+        <catValu>94</catValu>
+        <labl>94</labl>
+      </catgry>
+      <catgry>
+        <catValu>95</catValu>
+        <labl>95+</labl>
+      </catgry>
+      <catgry>
+        <catValu>96</catValu>
+        <labl>Since birth</labl>
+      </catgry>
+      <catgry>
+        <catValu>97</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>98</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>99</catValu>
+        <labl>Unknown-don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">Functional Limitation Causes Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="FLDIABETTP" files="ExtractData" name="FLDIABETTP" intrvl="discrete" dcml="0">
+      <location StartPos="25" width="1" EndPos="25"/>
+      <labl>Duration of functionally limiting diabetes: Time period</labl>
+      <txt><![CDATA[For Sample Adults age 18+ who, without using special equipment, had any difficulty with one or more functional activities (FLANY), and for whom diabetes was reported as a condition causing a functional activity limitation (FLDIABET), FLDIABETTP reports the time unit in which the duration of the diabetes was measured by the respondent. 
+
+Data on the duration of the limiting diabetes were collected via the question, "How long have you had [diabetes]?"  Respondents could answer this open-ended question using the time unit of their choice (i.e., days, weeks, months, years, or since birth).  The original responses to the question are reported in two complementary variables, FLDIABETTP (which, as noted above, specifies the time unit) and FLDIABETNO (which reports the number of such units).  For the NHIS public use files, the National Center for Health Statistics (NCHS) recoded the results from these two variables to create two other variables using standard time units: years (FLDIABETY) and groups of months (FLDIABETMO).]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Days</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Weeks</labl>
+      </catgry>
+      <catgry>
+        <catValu>3</catValu>
+        <labl>Months</labl>
+      </catgry>
+      <catgry>
+        <catValu>4</catValu>
+        <labl>Years</labl>
+      </catgry>
+      <catgry>
+        <catValu>6</catValu>
+        <labl>Since birth</labl>
+      </catgry>
+      <catgry>
+        <catValu>7</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>8</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>9</catValu>
+        <labl>Unknown-don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">Functional Limitation Causes Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="WORFREQ" files="ExtractData" name="WORFREQ" intrvl="discrete" dcml="0">
+      <location StartPos="26" width="1" EndPos="26"/>
+      <labl>How often feel worried, nervous, or anxious</labl>
+      <txt><![CDATA[Respondents reported how often they felt worried, nervous or anxious. 
+
+In 2010, this item was collected for sample adults who completed the Quality of Life supplement [URL omitted from DDI.] (administered to approximately a quarter of sample adults). In 2011-2017, this item was collected for sample adults who completed the Adult Functioning and Disability supplement [URL omitted from DDI.] (administered to a subset of sample adults). Beginning in 2018, this item was included on the sample adult questionnaire.]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Daily</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Weekly</labl>
+      </catgry>
+      <catgry>
+        <catValu>3</catValu>
+        <labl>Monthly</labl>
+      </catgry>
+      <catgry>
+        <catValu>4</catValu>
+        <labl>A few times a year</labl>
+      </catgry>
+      <catgry>
+        <catValu>5</catValu>
+        <labl>Never</labl>
+      </catgry>
+      <catgry>
+        <catValu>7</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>8</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>9</catValu>
+        <labl>Unknown-don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">Anxiety Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="DEPFREQ" files="ExtractData" name="DEPFREQ" intrvl="discrete" dcml="0">
+      <location StartPos="27" width="1" EndPos="27"/>
+      <labl>How often feel depressed</labl>
+      <txt><![CDATA[Respondents reported how often they felt depressed. 
+
+In 2010, this item was collected for sample adults who completed the Quality of Life supplement [URL omitted from DDI.] (administered to approximately a quarter of sample adults). In 2011-2017, this item was collected for sample adults who completed the Adult Functioning and Disability supplement [URL omitted from DDI.] (administered to a subset of sample adults). Beginning in 2018, this item was included on the sample adult questionnaire.]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Daily</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Weekly</labl>
+      </catgry>
+      <catgry>
+        <catValu>3</catValu>
+        <labl>Monthly</labl>
+      </catgry>
+      <catgry>
+        <catValu>4</catValu>
+        <labl>A few times a year</labl>
+      </catgry>
+      <catgry>
+        <catValu>5</catValu>
+        <labl>Never</labl>
+      </catgry>
+      <catgry>
+        <catValu>7</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>8</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>9</catValu>
+        <labl>Unknown-don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">Depression Variables -- PERSON</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+  </dataDscr>
+</codeBook>

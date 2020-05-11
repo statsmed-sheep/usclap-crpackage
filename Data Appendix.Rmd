@@ -108,7 +108,7 @@ tally(~RACEA, data = data)
 Each category code corresponds to a race. We noticed that the vast majority of individuals are white (category 100). 
 
 ```{r}
-tally(~HEALTH, data = data)
+tally(~HEALTH, data = data2)
 ```
 
 1 corresponds to very good health and 5 corresponds to very poor health. We noticed that most people are in good or excellent health, and fewer people are in poor health. In order to simplify our analysis, we decided to collapse health into a binary variable: good health versus poor health. We combined the 1, 2, and 3 categories into good health (because the middle (3) category was coded in IPUMS as "good"), and the other two into poor health.

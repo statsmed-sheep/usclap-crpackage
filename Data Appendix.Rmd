@@ -23,7 +23,7 @@ library(tidyverse)
 
 ```{r}
 # Create activity level variable and filter out non-applicable values
-data1 <- data %>% 
+data <- data %>% 
   mutate( activity_score = (9 * VIG10FWK + 5 * MOD10FWK + 3 * STRONGFWK)) %>% 
   filter(AGE >= 18, 
          BMI != "0", BMI != "0.00", BMI != "99.80", BMI != "99.99", 
@@ -33,19 +33,24 @@ data1 <- data %>%
          STRONGFWK != "00", STRONGFWK != "96", STRONGFWK != "97", STRONGFWK != "98", STRONGFWK != "99", 
          MOD10FWK != "00", MOD10FWK != "96", MOD10FWK != "97", MOD10FWK != "98", MOD10FWK != "99", 
          VIG10FWK != "00", VIG10FWK != "96", VIG10FWK != "97", VIG10FWK != "98", VIG10FWK != "99",
-         HRSLEEP != "00", HRSLEEP != "97", HRSLEEP != "98", HRSLEEP != "99")
-
-View(data1)
-
-data2 <- data1 %>% 
-  filter(DEPFREQ != "0", DEPFREQ != "7", DEPFREQ != "8", DEPFREQ != "9",
+         HRSLEEP != "00", HRSLEEP != "97", HRSLEEP != "98", HRSLEEP != "99",
+DEPFREQ != "0", DEPFREQ != "7", DEPFREQ != "8", DEPFREQ != "9",
          FLDIABETNO != "00", FLDIABETNO != "97", FLDIABETNO != "98", FLDIABETNO != "99",
          FLDIABETTP != "7", FLDIABETTP != "8", FLDIABETTP != "9") %>% 
   mutate(SEX = ifelse(SEX == 1, 0, 1))
 
-View(data2)
 
+```
 
+```{r}
+# convert time to years and recode chronic variable to 0 and 1
+data <- data %>% 
+  mutate(years = ifelse(FLDIABETTP == 1, FLDIABETNO / 365,
+                        ifelse(FLDIABETTP == 2, FLDIABETNO/52,
+                               ifelse(FLDIABETTP == 3, FLDIABETNO/12,
+                                      FLDIABETNO))
+         )) %>% 
+  mutate(chronic = ifelse(FLDIABETC == 2, 1, 0))
 ```
 
 # Variable Analysis
@@ -114,15 +119,17 @@ tally(~HEALTH, data = data)
 1 corresponds to very good health and 5 corresponds to very poor health. We noticed that most people are in good or excellent health, and fewer people are in poor health. In order to simplify our analysis, we decided to collapse health into a binary variable: good health versus poor health. We combined the 1, 2, and 3 categories into good health (because the middle (3) category was coded in IPUMS as "good"), and the other two into poor health.
 
 ```{r}
-tally(~DEPFREQ, data = data1)
+tally(~DEPFREQ, data = data)
 ```
 
 1 corresponds to the highest worry frequency (daily), and 5 corresponds to the lowest. We noticed that there are fewer people who worry a lot, and more who do not report worrying a lot. We think we will need to collapse some of the categories, but since it is not obvious from the tally which ones to combine, we will look at a faceted scatter plot using worry frequency as the explanatory and weight as the response in order to see if particular categories show particularly strong associations with weight. 
 
 ```{r}
-favstats(~FLDIABETNO, data = data1)
+favstats(~years, data = data)
 ```
-
+```{r}
+tally(~chronic, data = data)
+```
 # Additional Data Wrangling
 
 ```{r}
@@ -133,8 +140,8 @@ data <- data %>%
          income_middle = ifelse(INCFAM07ON == "12" | INCFAM07ON == "21" | INCFAM07ON == "22", 1, 0)) %>% 
   # health_binary = 1 indicates good health
   mutate(health_binary = ifelse(HEALTH == "1" | HEALTH == "2" | HEALTH == "3", 1, 0)) %>% 
-  select(WEIGHT, HRSLEEP, AGE, BMI, activity_score, SEX, RACEA, 
-         income_high, income_middle, health_binary, WORFREQ)
+  select(years, chronic, DEPFREQ, HRSLEEP, AGE, BMI, activity_score, SEX, RACEA, 
+         income_high, income_middle, health_binary)
 ```
 
 # Structure and Names
@@ -157,11 +164,30 @@ After some initial data wrangling, our data set has 11 variables and 19925 obser
 10. health_binary is a character that indicates whether and individual's health is "good" or "poor"
 11. WORFREQ is an integer that corresponds to a category (1-5) for how often an individual worries, 1 being daily and 5 being never.
 
+# Final Data Wrangling
+
+```{r}
+data <- data %>% 
+  # collapse depfreq into 3 categories, "a few times a year" or "never" is reference
+  mutate(depfreq_often = ifelse(DEPFREQ == 1 | DEPFREQ == 2, 1, 0),
+         depfreq_monthly = ifelse(DEPFREQ == 3 , 1, 0)) %>% 
+  mutate(race_asian = ifelse(RACEA == "411" | RACEA == "412" | RACEA == "416" |
+                          RACEA == "434", 1, 0),
+         race_black = ifelse(RACEA == "200", 1, 0),
+         race_na = ifelse(RACEA == "310", 1, 0)) %>% 
+  filter(RACEA != "580") %>% 
+  select(years, chronic, depfreq_often, depfreq_monthly, HRSLEEP, AGE, BMI, activity_score, SEX, RACEA, 
+         income_high, income_middle, health_binary)
+```
+
+
 # Visualization
 
 ```{r}
+data2 <- data %>% 
+  filter(years > 0)
 # Create scatter plot of weight versus hours of sleep
-ggplot(data, aes(x = HRSLEEP, y = WEIGHT))+
+ggplot(data2, aes(x = HRSLEEP, y = years))+
   geom_point(alpha = 0.1) + 
   geom_jitter() +
   geom_smooth(method = lm, se = FALSE)
@@ -170,7 +196,7 @@ ggplot(data, aes(x = HRSLEEP, y = WEIGHT))+
 Although the strength and magnitude of the fitted line are weak, the slope is negative, indicating an inverse relationship between hours of sleep and weight in pounds as we hypothesized.
 
 ```{r}
-worfreq_labels <- c(
+depfreq_labels <- c(
   "1" = 'Daily',
   "2" = 'Weekly',
   "3" = 'Monthly',
@@ -179,11 +205,11 @@ worfreq_labels <- c(
 )
 
 # Facet scatterplot by worry frequency
-ggplot(data, aes(x = HRSLEEP, y = WEIGHT))+
+ggplot(data2, aes(x = HRSLEEP, y = years))+
   geom_point(alpha = 0.1) + 
   geom_jitter() +
   geom_smooth(method = lm, se = FALSE) +
-  facet_grid(cols=vars(WORFREQ), labeller=labeller(WORFREQ = worfreq_labels))
+  facet_grid(cols=vars(DEPFREQ), labeller=labeller(DEPFREQ = depfreq_labels))
 ```
 
 For all worry frequencies except WORFREQ = 1 (daily), the relationship between hours of sleep and weight remains negative. For observational units who worried daily, however, the relationship between HRSLEEP and WEIGHT appears slightly positive. This hints at a possibly significant interaction between HRSLEEP/WEIGHT and a binary WORFREQ variable with 1 coded as worrying daily and 0 coded as worrying less than daily.
@@ -199,31 +225,28 @@ race_labels <- c("100" = 'White',
               "580" = 'NR')
 
 # Facet scatterplot by race
-ggplot(data, aes(x = HRSLEEP, y = WEIGHT))+
+ggplot(data2, aes(x = HRSLEEP, y = years))+
   geom_point(alpha = 0.1) + 
   geom_jitter() +
   geom_smooth(method = lm, se = FALSE) +
   facet_grid(col=vars(RACEA), labeller=labeller(RACEA = race_labels))
 ```
 
-# Final Data Wrangling
 
 ```{r}
-data <- data %>% 
-  mutate(worfreq_binary = ifelse(WORFREQ == 1, 1, 0)) %>% 
-  mutate(race_asian = ifelse(RACEA == "411" | RACEA == "412" | RACEA == "416" |
-                          RACEA == "434", 1, 0),
-         race_black = ifelse(RACEA == "200", 1, 0),
-         race_na = ifelse(RACEA == "310", 1, 0)) %>% 
-  filter(RACEA != "580")
-```
-
-```{r}
-# Facet scatterplot by worry frequency binary
-ggplot(data, aes(x = HRSLEEP, y = WEIGHT))+
+# Facet scatterplot by depfreq_often
+ggplot(data2, aes(x = HRSLEEP, y = years))+
   geom_point(alpha = 0.1) + 
   geom_jitter() +
-  facet_wrap(~worfreq_binary) +
+  facet_wrap(~depfreq_often) +
+  geom_smooth(method = lm, se = FALSE)
+```
+```{r}
+# Facet scatterplot by depfreq_monthly
+ggplot(data2, aes(x = HRSLEEP, y = years))+
+  geom_point(alpha = 0.1) + 
+  geom_jitter() +
+  facet_wrap(~depfreq_monthly) +
   geom_smooth(method = lm, se = FALSE)
 ```
 
@@ -234,44 +257,22 @@ After recording worry frequency as a binary variable, we re-evaluated the relati
 # Checking Collinearity between Sleep and Worry Frequency
 
 ```{r}
-ggplot(data, aes(x = worfreq_binary, y = HRSLEEP)) +
+ggplot(data2, aes(x = depfreq_often, y = HRSLEEP)) +
   geom_point(alpha = 0.1) + 
   geom_jitter() +
   geom_smooth(method = lm, se = FALSE)
 ```
-
+```{r}
+ggplot(data2, aes(x = depfreq_monthly, y = HRSLEEP)) +
+  geom_point(alpha = 0.1) + 
+  geom_jitter() +
+  geom_smooth(method = lm, se = FALSE)
+```
 Based on the scatterplots of binary worry frequency vs hours of sleep, there does not appear to be a significant relationship between the two, and so we do not suspect collinearity between our two explanatory variables.
 
 ```{r}
 # Exporting wranled dataset for data analysis use
 write.csv(data, "filename.csv")
-```
-
-# Scatterplots with BMI as response
-
-```{r, warning = FALSE, message = FALSE}
-# Create scatter plot of BMI versus hours of sleep
-ggplot(data, aes(x = HRSLEEP, y = BMI))+
-  geom_point(alpha = 0.1) + 
-  geom_jitter() +
-  geom_smooth(method = lm, se = FALSE)
-```
-
-```{r}
-# Facet scatterplot by worry frequency
-ggplot(data, aes(x = HRSLEEP, y = WEIGHT))+
-  geom_point(alpha = 0.1) + 
-  geom_jitter() +
-  facet_wrap(~WORFREQ) +
-  geom_smooth(method = lm, se = FALSE)
-```
-
-```{r}
-#Age versus BMI
-ggplot(data, aes(x = AGE, y = BMI))+
-  geom_point(alpha = 0.1) + 
-  geom_jitter() +
-  geom_smooth(method = lm, se = FALSE)
 ```
 
 # Tallies after data wrangling
@@ -313,5 +314,10 @@ tally(~health_binary, data = data)
 ```
 
 ```{r}
-tally(~worfreq_binary, data = data)
+tally(~depfreq_often, data = data)
+tally(~depfreq_monthly, data = data)
 ```
+```{r}
+favstats(~years, data = data)
+```
+

@@ -1,0 +1,386 @@
+---
+title: "Data Analysis & Modelling"
+author: "Rose Porta and Clara Li"
+date: "05/16/2020"
+output: html_document
+---
+
+```{r}
+# bringing in data from appendix
+data <- read.csv("data.csv")
+
+library(tidyverse)
+library(broom)
+library(gtools)
+```
+
+
+```{r}
+# Fit full model with years as response (secondary hypothesis)
+model_full <- lm(data = data, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_often) + AGE + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na)
+
+summary(model_full)
+```
+(Not updated)
+Multiple Regression Model: 
+
+$log(BMI) = \beta_0 + \beta_1\cdot HRSLEEP + \beta_2\cdot worfreq\_binary + \beta_3\cdot HRSLEEP\cdot worfreq\_binary + \beta_4\cdot log(AGE) + \beta_5\cdot activity\_score + \beta_6\cdot SEX + \beta_7\cdot income\_high + \beta_8\cdot income\_middle + \beta_9\cdot health\_binary + \beta_10\cdot race\_asian + \beta_11\cdot race\_black + \beta_12\cdot race\_na$
+
+Fitted Model: 
+
+$\widehat{log(BMI)} = \hat{\beta_0} + \hat{\beta_1}\cdot HRSLEEP + \hat{\beta_2}\cdot worfreq\_binary + \hat{\beta_3}\cdot HRSLEEP\cdot worfreq\_binary + \hat{\beta_4}\cdot log(AGE) + \hat{\beta_5}\cdot activity\_score + \hat{\beta_6}\cdot SEX + \hat{\beta_7}\cdot income\_high + \hat{\beta_8}\cdot income\_middle + \hat{\beta_9}\cdot health\_binary + \hat{\beta_10}\cdot race\_asian + \hat{\beta_11}\cdot race\_black + \hat{\beta_12}\cdot race\_na$
+
+$\widehat{log(BMI)} = 3.290 + -0.006995\cdot HRSLEEP + -0.03280\cdot worfreq\_binary + 0.004940\cdot HRSLEEP\cdot worfreq\_binary + 0.02174\cdot log(AGE) + 0.00003110\cdot activity\_score + -0.02431\cdot SEX + 0.001094\cdot income\_high + 0.02276\cdot income\_middle + -0.04392\cdot health\_binary + -0.07999\cdot race\_asian + 0.03856\cdot race\_black + 0.05196\cdot race\_na$
+
+# Check Regression Assumptions
+
+## Linearity
+
+Since our sample size is so large, it is difficult to determine from the scatterplots whether or not the relationship is linear, but there is no clear non-linear pattern, so the linearity assumption is reasonable.
+
+```{r, warning = FALSE, message = FALSE}
+# Create scatter plot of years versus hours of sleep
+ggplot(data, aes(x = HRSLEEP, y = years))+
+  geom_point(alpha = 0.1) + 
+  geom_jitter() +
+  geom_smooth(method = lm, se = FALSE)
+```
+
+```{r}
+# Facet scatterplot by depression frequency
+ggplot(data, aes(x = HRSLEEP, y = years))+
+  geom_point(alpha = 0.1) + 
+  geom_jitter() +
+  facet_wrap(~depfreq_often) +
+  geom_smooth(method = lm, se = FALSE)
+```
+
+```{r}
+# Facet scatterplot by depression frequency
+ggplot(data, aes(x = HRSLEEP, y = years))+
+  geom_point(alpha = 0.1) + 
+  geom_jitter() +
+  facet_wrap(~depfreq_often) +
+  geom_smooth(method = lm, se = FALSE)
+```
+## Constant Variance
+
+The residuals versus fitted values plot below shows a clear fan shape, with much higher variability at higher fitted values than lower ones, so constant variance is violated. 
+
+```{r}
+# Code from Rose's Exam 1
+# Creates table of residuals stored in m1_data
+m1_data<-augment(model_full)
+
+# Creates residuals vs. fitted plot
+ggplot(data = m1_data, aes(x = .fitted, y = .resid))+
+  geom_point()+
+  labs(title = "Residuals Versus Fitted Plot")
+
+```
+## Normality
+
+Using just BMI as the response,the Normal Q-Q plot is clearly curved, and the histogram of residuals shows a clearly skewed distribution, so the normality assumption is violated. So, we applied a log transformation to BMI, and now the Q-Q plot is approximately linear and the histogram of residuals shows an approximately normal distribution, so the normality assuption is reasonably met.
+
+```{r, message = FALSE}
+# Generates Q-Q Plot
+ggplot(data = m1_data, aes(sample = .resid))+
+  geom_qq()+
+  labs(title = "Q-Q Plot")
+
+# Generates histogram of residuals
+ggplot(data = m1_data, aes(x = .resid))+
+  geom_histogram()+
+  labs(title = "Histogram of Residuals")
+```
+## Randomness
+
+Our data is based on a random sample, so the randomness assumption is met. 
+
+## Independence
+
+Only one adult from each household was chosen for the survey, so is is reasonable to assume that one sampled individual's BMI would not impact any other sampled individual's BMI, so independence is reasonable. 
+
+# Significance Tests:
+
+## T-test for slope:
+
+$\beta_1$: 
+
+$H_0: \beta_1 = 0$ 
+
+$H_a: \beta_1 \ne 0$
+
+$\alpha = 0.05$
+
+t-value = -6.721 
+
+p-value = 1.86e-11
+
+Since our p-value of 1.86e-11 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that there is a significant linear relationship between the number of hours of sleep and individual gets per night and their BMI, adjusting for worry frequency and the rest of our confounding variables. However, we must use this conclusion with caution because the constant variance condition for our model is not met.
+
+$\beta_2$: 
+
+$H_0: \beta_2 = 0$ 
+
+$H_a: \beta_2 \ne 0$
+
+$\alpha = 0.05$
+
+t-value = -1.825    
+
+p-value = 0.0680
+
+Since our p-value of 0.0680 is not less than 0.05, we cannot formally reject the null hypothesis, but it is close to the significance level, which indicates that there is some evidence that there is a significant difference between the intercepts of the regression lines predicting BMI from hours of sleep for individuals who worry daily versus those who do not, adjusting for the rest of our confounding variables. 
+
+$\beta_3$: 
+
+$H_0: \beta_3 = 0$ 
+
+$H_a: \beta_3 \ne 0$
+
+$\alpha = 0.05$
+
+t-value = 1.931      
+
+p-value = 0.0535
+
+Since our p-value of 0.0535 is not less than 0.05, we cannot formally reject the null hypothesis, but it is close to the significance level, which indicates that there is some evidence that there is a significant difference between the slopes of the regression lines predicting BMI from hours of sleep for individuals who worry daily versus those who do not, adjusting for the rest of our confounding variables.
+
+## 95% Confidence Intervals
+
+$\beta_1$: CI = (0.9910059, 0.9950576)
+
+We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's BMI will decrease by a factor of between 0.991 and 0.995, on average, from the average BMI for an individual who gets one fewer hour of sleep per night, adjusting for worry frequency and the rest of our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and BMI.
+
+$\beta_2$: CI = (0.9342296, 1.0024312)
+
+We are 95% confident that adjusting for hours of sleep and the other confounding variables, the average BMI of an individual who worries daily will be between 0.934 and 1.002 times the average BMI of an individual who does not worry daily. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average BMI for individuals who worry daily versus those who do not. 
+
+$\beta_3$: CI = (0.9999254, 1.0100036)
+
+We are 95% confident that adjusting for our confounding variables, the average rate of change in BMI as hours of sleep increases for an individual who worries daily differs from that of an individual who does not worry daily by a factor between 0.9999 and 1.0100. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average rate of change in BMI as hours of sleep increases for individuals who worry daily versus those who do not. 
+
+```{r}
+exp(confint(model_full))
+```
+
+
+```{r}
+# Fit nested model (primary hypothesis)
+model_nested <- lm(data = data, log(BMI) ~ HRSLEEP + log(AGE) + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na)
+
+summary(model_nested)
+```
+Nested Multiple Regression Model: 
+
+$BMI = \beta_0 + \beta_1\cdot HRSLEEP + \beta_2\cdot log(AGE) + \beta_3\cdot activity\_score + \beta_4\cdot SEX + \beta_5\cdot income\_high + \beta_6\cdot income\_middle + \beta_7\cdot health\_binary + \beta_8\cdot race\_asian + \beta_9\cdot race\_black + \beta_10\cdot race\_na$
+
+Fitted Model: 
+
+$\widehat{BMI} = \hat{\beta_0} + \hat{\beta_1}\cdot HRSLEEP + \hat{\beta_2}\cdot log(AGE) + \hat{\beta_3}\cdot activity\_score + \hat{\beta_4}\cdot SEX + \hat{\beta_5}\cdot income\_high + \hat{\beta_6}\cdot income\_middle + \hat{\beta_7}\cdot health\_binary + \hat{\beta_8}\cdot race\_asian + \hat{\beta_9}\cdot race\_black + \hat{\beta_10}\cdot race\_na$
+
+$\widehat{BMI} = 3.285 + -0.006191\cdot HRSLEEP + 0.02160\cdot log(AGE) + 0.00003109\cdot activity\_score + -0.02438\cdot SEX + 0.001182\cdot income\_high + 0.02279\cdot income\_middle + -0.04396\cdot health\_binary + -0.08005\cdot race\_asian + 0.03855\cdot race\_black + 0.05177\cdot race\_na$
+
+# Significance Tests:
+
+## T-test for slope:
+
+$\beta_1$: 
+
+$H_0: \beta_1 = 0$ 
+
+$H_a: \beta_1 \ne 0$
+
+$\alpha = 0.05$
+
+t-value = -6.529 6.80e-11 
+
+p-value = 6.80e-11
+
+Since our p-value of 6.80e-11 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that there is a significant linear relationship between the number of hours of sleep and individual gets per night and their BMI, adjusting for our confounding variables. However, we must use this conclusion with caution because the constant variance condition for our model is not met.
+
+## 95% Confidence Intervals
+
+$\beta_1$: CI = (0.9919827, 0.9956772)
+
+We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's BMI will decrease by a factor of between 0.992 and 0.996, on average, from the average BMI for an individual who gets one fewer hour of sleep per night, adjusting for our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and BMI.
+
+```{r}
+exp(confint(model_nested))
+```
+
+## Nested F-Test
+
+$H_0: \beta_2 = \beta_3 = 0$ 
+
+$H_a: \beta_i \ne 0$
+
+$\alpha = 0.05$
+
+### Nested Model
+```{r}
+anova(model_nested)
+```
+
+### Full Model
+```{r}
+anova(model_full)
+```
+
+##### Nested F Test
+```{r}
+anova(model_nested, model_full)
+```
+
+The nested-F test is $$Nested F = \frac{\frac{SSM_\text{full}-SSM_\text{nested}}{\text{Number of predictors}}}{\frac{SSE_\text{Full}}{n-k-1}}$$
+
+In this case, we have $Nested F = \frac{\frac{35.38-35.26}{2}}{\frac{683.85}{19861-10-1}} = \frac{\frac{0.12}{2}}{0.034} = \frac{0.06}{0.034} = 1.76$
+
+The value of the nested F-statistic is 1.76 on a distribution with 2 degrees of freedom on the numerator and 1948 degrees of freedom on the denominator. This yields a p-value of 0.15, which is not significant at the alpha = 0.05 level. We therefore fail to reject the null hypothesis that the the full model including the worry frequency and worry frequency/hours of sleep interaction variable performs better than the nested model based on hours of sleep alone.
+
+# Logistic Model
+```{r}
+# Create binary BMI variable -- 1 = obese, 0 = not obese
+data_binary <- data %>% 
+  mutate(BMI_binary = ifelse(BMI >= 30, 1, 0))
+
+# Fit logistic model
+model_logistic <- glm(BMI_binary ~ HRSLEEP + worfreq_binary + I(HRSLEEP*worfreq_binary) + log(AGE) + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na, family = binomial, data = data_binary)
+
+summary(model_logistic)
+```
+Multiple Logistic Regression Model: 
+
+$log(odds) = \beta_0 + \beta_1\cdot HRSLEEP + \beta_2\cdot worfreq\_binary + \beta_3\cdot HRSLEEP\cdot worfreq\_binary + \beta_4\cdot log(AGE) + \beta_5\cdot activity\_score + \beta_6\cdot SEX + \beta_7\cdot income\_high + \beta_8\cdot income\_middle + \beta_9\cdot health\_binary + \beta_10\cdot race\_asian + \beta_11\cdot race\_black + \beta_12\cdot race\_na$
+
+Fitted Model: 
+
+$\widehat{log(odds)} = \hat{\beta_0} + \hat{\beta_1}\cdot HRSLEEP + \hat{\beta_2}\cdot worfreq\_binary + \hat{\beta_3}\cdot HRSLEEP\cdot worfreq\_binary + \hat{\beta_4}\cdot log(AGE) + \hat{\beta_5}\cdot activity\_score + \hat{\beta_6}\cdot SEX + \hat{\beta_7}\cdot income\_high + \hat{\beta_8}\cdot income\_middle + \hat{\beta_9}\cdot health\_binary + \hat{\beta_10}\cdot race\_asian + \hat{\beta_11}\cdot race\_black + \hat{\beta_12}\cdot race\_na$
+
+$\widehat{log(odds)} = -0.3677627 + -0.0670549\cdot HRSLEEP + -0.4598034\cdot worfreq\_binary + 0.0712617\cdot HRSLEEP\cdot worfreq\_binary + 0.0039689\cdot log(AGE) + 0.0003783\cdot activity\_score + -0.0066830\cdot SEX + -0.0453890\cdot income\_high + 0.1994200\cdot income\_middle + -0.4537598\cdot health\_binary + -1.0034365\cdot race\_asian + 0.2860679\cdot race\_black + 0.4187123\cdot race\_na$
+
+## Checking Regression Assumptions: 
+
+# Linearity
+
+The empirical logit plot seems approximately linear, except for one outlier-- the point representing the group with greatest number of hours of sleep.
+
+```{r, warning = FALSE, message = FALSE}
+# Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
+data_bin <- data_binary %>%
+  # Break HRSLEEP into 10 bins
+  mutate(HRSLEEP_group = cut(HRSLEEP, breaks=10)) %>% 
+  group_by(HRSLEEP_group) %>%
+  # calculate mean HRSLEEP value and proportion obese in each bin
+  mutate(binned.y = mean(BMI_binary), binned.x = mean(HRSLEEP)) %>% 
+  # transform binned.y from proportion to log(odds)
+  mutate(binned.y_logit = logit(binned.y))
+
+# Create plot of log(odds) verus age
+ggplot(data_bin, aes(x = binned.x, y = binned.y_logit)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = FALSE)
+```
+## Randomness
+
+Obviously, individuals are not assigned BMIs by a spinner model, but since we have a random sample, the randomness assumption is met.
+
+## Independence
+
+As established above for the linear regression model, the independence assumption is reasonable for this data set. 
+
+# Significance Tests: 
+
+## Z-test for slope: 
+
+$\beta_1$: 
+
+$H_0: \beta_1 = 0$ 
+
+$H_a: \beta_1 \ne 0$
+
+$\alpha = 0.05$
+
+z-value = -5.438  
+
+p-value = 5.38e-08
+
+Since our p-value of 5.38e-08 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that there is a significant relationship between the number of hours of sleep and individual gets per night and their likelihood of having a BMI that classifies them as obese, adjusting for worry frequency and the rest of our confounding variables. 
+
+$\beta_2$: 
+
+$H_0: \beta_2 = 0$ 
+
+$H_a: \beta_2 \ne 0$
+
+$\alpha = 0.05$
+
+z-value = -2.243 0.024896    
+
+p-value = 0.024896
+
+Since our p-value of 0.024896 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that on average, adjusting for hours of sleep and the rest of our confounding variables, an individual's likelihood of being obese differs depending on whether they worry daily or not. 
+
+$\beta_3$: 
+
+$H_0: \beta_3 = 0$ 
+
+$H_a: \beta_3 \ne 0$
+
+$\alpha = 0.05$
+
+z-value = 2.445 0.014482      
+
+p-value = 0.014482
+
+Since our p-value of 0.014482 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that adjusting for our confounding variables, on average, the rate of change of an individual's odds of obesity as hours of sleep increases differs for individuals who worry daily versus those who do not. 
+
+## 95% Confidence Intervals
+
+$\beta_1$: CI = (0.9127667, 0.9579719)
+
+We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's odds of being classified as obese will decrease by a factor of between 0.913 and 0.958, on average, from the average odds of being obese for an individual who gets one fewer hour of sleep per night, adjusting for worry frequency and the rest of our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and likelihood of being obese.
+
+$\beta_2$: CI = (0.4222978, 0.9436237)
+
+We are 95% confident that adjusting for hours of sleep and the other confounding variables, on average, the odds of being obese for an individual who worries daily decreases by a factor between 0.422 and 0.943 from the odds of being obese for an individual who does not worry daily. Since our confidence interval does not include 1, this indicates that there is a significant difference in the odds of being obese between individuals who worry daily and those who do not. 
+
+$\beta_3$: CI = (1.0141055, 1.1369377)
+
+We are 95% confident that adjusting for our confounding variables, the magnitude of the average rate of change of the odds of obesity as hours of sleep increases for an individual who worries daily is between 1.014 and 1.137 times the rate of change of an individual who does not worry daily. Since our confidence interval does not include 1, this indicates that the average rate of change of the odds of obesity differs significantly for individuals who worry daily versus those who do not. 
+
+```{r, message = FALSE}
+exp(confint(model_logistic))
+```
+
+## Likelihood Ratio Test
+
+$H_0: \beta_i = 0$ 
+
+$H_a: \beta_i \ne 0$
+
+$\alpha = 0.05$
+
+```{r}
+# Load necessary package
+require(lmtest)
+lrtest(model_logistic)
+```
+
+The $-2log(L)$ values are $-2\cdot -12154 = 24308$ and $-2\cdot -11800 = 23600$ for the null model and full logistic model, respectively. This yields a G-statistic of 24308 - (23600) = 708. Compared to a chi-distribution with 12 degrees of freedom, the p-value is less than 2.2e-16, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the multiple logistic regression model based on sleep, worry frequency, and the interaction between sleep and worry frequency is effective at explaining the probability of being obese.
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds <- augment(x=model_logistic, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs<- preds %>%
+  select(prob,lci,uci, worfreq_binary , HRSLEEP, BMI_binary)
+
+library(InformationValue)
+Concordance(probs$BMI_binary, probs$prob)
+```
+

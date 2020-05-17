@@ -24,7 +24,7 @@ summary(model_full)
 
 # Result: nothing of interest is significant
 
-# Trying out transformations: removed health_binary (collinear with dependent), tried combinations of log(AGE) and merging DEPFREQ again
+# Trying out transformations: removed health_binary (collinearity issues), tried combinations of log(AGE) and merging DEPFREQ again
 
 model_full <- lm(data = data, formula = years ~ HRSLEEP + DEPFREQ + I(HRSLEEP*DEPFREQ) + AGE + activity_score + SEX + income_high + income_middle + race_asian + race_black + race_na)
 

@@ -17,9 +17,23 @@ library(gtools)
 
 ```{r}
 # Fit full model with years as response (secondary hypothesis)
+# Original model
 model_full <- lm(data = data, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + AGE + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na)
 
 summary(model_full)
+
+# Result: nothing of interest is significant
+
+# Trying out transformations: removed health_binary (collinear with dependent), tried combinations of log(AGE) and merging DEPFREQ again
+
+model_full <- lm(data = data, formula = years ~ HRSLEEP + DEPFREQ + I(HRSLEEP*DEPFREQ) + AGE + activity_score + SEX + income_high + income_middle + race_asian + race_black + race_na)
+
+summary(model_full)
+
+# Results:
+# DEPFREQ unmerged, log(AGE): depfreq_often significant, p-val = 0.045395
+# DEPFREQ merged, AGE: DEPFREQ significant, p-val = 0.006718
+# DEPFREQ merged, log(AGE): DEPFREQ signficant p-val = 0.006007
 ```
 (Not updated)
 Multiple Regression Model: 
@@ -86,6 +100,8 @@ Using just BMI as the response,the Normal Q-Q plot is clearly curved, and the hi
 ggplot(data = m1_data, aes(sample = .resid))+
   geom_qq()+
   labs(title = "Q-Q Plot")
+
+qqnorm(data$years)
 
 # Generates histogram of residuals
 ggplot(data = m1_data, aes(x = .resid))+
@@ -245,7 +261,7 @@ data_binary <- data %>%
   mutate(diab_binary = ifelse(years > 0, 1, 0))
 
 # Fit logistic model
-model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + AGE + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na, family = binomial, data = data_binary)
+model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na, family = binomial, data = data_binary)
 
 summary(model_logistic)
 ```

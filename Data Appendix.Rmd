@@ -171,13 +171,14 @@ data <- data %>%
   # collapse depfreq into 3 categories, "a few times a year" or "never" is reference
   mutate(depfreq_often = ifelse(DEPFREQ == 1 | DEPFREQ == 2, 1, 0),
          depfreq_monthly = ifelse(DEPFREQ == 3 , 1, 0)) %>% 
-  mutate(race_asian = ifelse(RACEA == "411" | RACEA == "412" | RACEA == "416" |
-                          RACEA == "434", 1, 0),
-         race_black = ifelse(RACEA == "200", 1, 0),
-         race_na = ifelse(RACEA == "310", 1, 0)) %>% 
+  mutate(
+    race_asian = ifelse(RACEA == "411" | RACEA == "412" | RACEA == "416" | RACEA == "434", 1, 0),
+    race_black = ifelse(RACEA == "200", 1, 0),
+    race_na = ifelse(RACEA == "310", 1, 0)
+    ) %>% 
   filter(RACEA != "580") %>% 
-  select(years, chronic, depfreq_often, depfreq_monthly, HRSLEEP, AGE, BMI, activity_score, SEX, RACEA, 
-         income_high, income_middle, health_binary)
+  select(years, chronic, depfreq_often, depfreq_monthly, HRSLEEP, AGE, BMI, activity_score, SEX, race_asian, race_black, race_na, 
+         income_high, income_middle, health_binary, RACEA, DEPFREQ)
 ```
 
 
@@ -271,8 +272,8 @@ ggplot(data2, aes(x = depfreq_monthly, y = HRSLEEP)) +
 Based on the scatterplots of binary worry frequency vs hours of sleep, there does not appear to be a significant relationship between the two, and so we do not suspect collinearity between our two explanatory variables.
 
 ```{r}
-# Exporting wranled dataset for data analysis use
-write.csv(data, "filename.csv")
+# Exporting wrangled dataset for data analysis use
+write.csv(data, "data.csv")
 ```
 
 # Tallies after data wrangling

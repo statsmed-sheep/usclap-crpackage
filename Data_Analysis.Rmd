@@ -16,24 +16,49 @@ library(gtools)
 
 
 ```{r}
-# Fit full model with years as response (secondary hypothesis)
+# Fit full model with years as response
 # Original model
-model_full <- lm(data = data, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + AGE + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na)
+model_full <- lm(data = data, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + AGE + SEX + BMI + activity_score + health_binary + income_high + income_middle + race_asian + race_black + race_na)
 
 summary(model_full)
 
 # Result: nothing of interest is significant
 
-# Trying out transformations: removed health_binary (collinearity issues), tried combinations of log(AGE) and merging DEPFREQ again
+# Trying out transformations: removed health_binary (collinearity issues), tried log(AGE)
 
-model_full <- lm(data = data, formula = years ~ HRSLEEP + DEPFREQ + I(HRSLEEP*DEPFREQ) + AGE + activity_score + SEX + income_high + income_middle + race_asian + race_black + race_na)
+model_full <- lm(data = data, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
 
 summary(model_full)
 
-# Results:
-# DEPFREQ unmerged, log(AGE): depfreq_often significant, p-val = 0.045395
-# DEPFREQ merged, AGE: DEPFREQ significant, p-val = 0.006718
-# DEPFREQ merged, log(AGE): DEPFREQ signficant p-val = 0.006007
+# Results for data (everyone):
+# removed health_binary: depfreq_often significant, p-val = 0.03512
+# removed health_binary, log(AGE): depfreq_often significant, p-val = 0.032844
+
+# Examining sex differences separately
+# Allows us to see if relationship is significant for only males, only females, or both
+
+# Data 1: only women
+data1 <- data %>% 
+  filter(SEX == 1)
+
+model_full1 <- lm(data = data1, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
+
+summary(model_full1)
+
+# Results for data1:
+# HRSLEEP significant at 0.10 level, p-value = 0.094166
+# depfreq_often significant at 0.01 level, p-value = 0.003030
+# I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
+
+# Data 2: only men
+data2 <- data %>% 
+  filter(SEX == 0)
+
+model_full2 <- lm(data = data2, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
+
+summary(model_full2)
+
+# Result for data2: nothing of interest is significant
 ```
 (Not updated)
 Multiple Regression Model: 
@@ -79,7 +104,7 @@ ggplot(data, aes(x = HRSLEEP, y = years))+
 ```
 ## Constant Variance
 
-The residuals versus fitted values plot below shows a clear fan shape, with much higher variability at higher fitted values than lower ones, so constant variance is violated. 
+The residuals versus fitted values plot below shows no patterns and only random scatter, so the constant variance assumption is reasonable.***
 
 ```{r}
 # Code from Rose's Exam 1
@@ -94,14 +119,12 @@ ggplot(data = m1_data, aes(x = .fitted, y = .resid))+
 ```
 ## Normality
 
-Using just BMI as the response,the Normal Q-Q plot is clearly curved, and the histogram of residuals shows a clearly skewed distribution, so the normality assumption is violated. So, we applied a log transformation to BMI, and now the Q-Q plot is approximately linear and the histogram of residuals shows an approximately normal distribution, so the normality assuption is reasonably met.
+Using just BMI as the response,the Normal Q-Q plot is clearly curved, and the histogram of residuals shows a clearly skewed distribution, so the normality assumption is violated. No transformations appear to alleviate this skewedness.***
 
 ```{r, message = FALSE}
 ggplot(data = m1_data, aes(sample = .resid))+
   geom_qq()+
   labs(title = "Q-Q Plot")
-
-qqnorm(data$years)
 
 # Generates histogram of residuals
 ggplot(data = m1_data, aes(x = .resid))+
@@ -114,7 +137,7 @@ Our data is based on a random sample, so the randomness assumption is met.
 
 ## Independence
 
-Only one adult from each household was chosen for the survey, so is is reasonable to assume that one sampled individual's BMI would not impact any other sampled individual's BMI, so independence is reasonable. 
+Only one adult from each household was chosen for the survey, so it is reasonable to assume that one sampled individual's BMI would not impact any other sampled individual's BMI, so independence is reasonable. 
 
 # Significance Tests:
 
@@ -128,11 +151,11 @@ $H_a: \beta_1 \ne 0$
 
 $\alpha = 0.05$
 
-t-value = -6.721 
+t-value = 1.559
 
-p-value = 1.86e-11
+p-value = 0.119109    
 
-Since our p-value of 1.86e-11 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that there is a significant linear relationship between the number of hours of sleep and individual gets per night and their BMI, adjusting for worry frequency and the rest of our confounding variables. However, we must use this conclusion with caution because the constant variance condition for our model is not met.
+Since our p-value of 0.119109 is greater than 0.05, we fail to reject the null hypothesis and conclude that there is no significant linear relationship between the number of hours of sleep an individual gets per night and the years of diabetes they have had, adjusting for depression frequency and the rest of our confounding variables.
 
 $\beta_2$: 
 
@@ -142,11 +165,11 @@ $H_a: \beta_2 \ne 0$
 
 $\alpha = 0.05$
 
-t-value = -1.825    
+t-value = 2.134    
 
-p-value = 0.0680
+p-value = 0.032844
 
-Since our p-value of 0.0680 is not less than 0.05, we cannot formally reject the null hypothesis, but it is close to the significance level, which indicates that there is some evidence that there is a significant difference between the intercepts of the regression lines predicting BMI from hours of sleep for individuals who worry daily versus those who do not, adjusting for the rest of our confounding variables. 
+Since our p-value of 0.032844 is less than 0.05, we reject the null hypothesis and conclude that there is a significant difference between the intercepts of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed daily or weekly, adjusting for the rest of our confounding variables. 
 
 $\beta_3$: 
 
@@ -156,34 +179,69 @@ $H_a: \beta_3 \ne 0$
 
 $\alpha = 0.05$
 
-t-value = 1.931      
+t-value = 0.562      
 
-p-value = 0.0535
+p-value = 0.573982
 
-Since our p-value of 0.0535 is not less than 0.05, we cannot formally reject the null hypothesis, but it is close to the significance level, which indicates that there is some evidence that there is a significant difference between the slopes of the regression lines predicting BMI from hours of sleep for individuals who worry daily versus those who do not, adjusting for the rest of our confounding variables.
+Since our p-value of 0.573982 is greater than 0.05, we fail to reject the null hypothesis and conclude that there is no significant difference between the intercepts of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed monthly, adjusting for the rest of our confounding variables.
+
+$\beta_4$: 
+
+$H_0: \beta_4 = 0$ 
+
+$H_a: \beta_4 \ne 0$
+
+$\alpha = 0.05$
+
+t-value = -0.901      
+
+p-value = 0.367520
+
+Since our p-value of 0.367520 is greater than 0.05, we have fail to reject the null hypothesis and conclude that there is no significant difference between the slopes of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed daily or weekly, adjusting for the rest of our confounding variables.
+
+$\beta_5$: 
+
+$H_0: \beta_5 = 0$ 
+
+$H_a: \beta_5 \ne 0$
+
+$\alpha = 0.05$
+
+t-value = -0.081      
+
+p-value = 0.935587
+
+Since our p-value of 0.935587 is greater than 0.05, we have fail to reject the null hypothesis and conclude that there is no no significant difference between the slopes of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed monthly, adjusting for the rest of our confounding variables.
 
 ## 95% Confidence Intervals
-
-$\beta_1$: CI = (0.9910059, 0.9950576)
-
-We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's BMI will decrease by a factor of between 0.991 and 0.995, on average, from the average BMI for an individual who gets one fewer hour of sleep per night, adjusting for worry frequency and the rest of our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and BMI.
-
-$\beta_2$: CI = (0.9342296, 1.0024312)
-
-We are 95% confident that adjusting for hours of sleep and the other confounding variables, the average BMI of an individual who worries daily will be between 0.934 and 1.002 times the average BMI of an individual who does not worry daily. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average BMI for individuals who worry daily versus those who do not. 
-
-$\beta_3$: CI = (0.9999254, 1.0100036)
-
-We are 95% confident that adjusting for our confounding variables, the average rate of change in BMI as hours of sleep increases for an individual who worries daily differs from that of an individual who does not worry daily by a factor between 0.9999 and 1.0100. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average rate of change in BMI as hours of sleep increases for individuals who worry daily versus those who do not. 
 
 ```{r}
 exp(confint(model_full))
 ```
 
+$\beta_1$: CI = (0.99361434 1.05774977)
+
+We are 95% confident that for each hour increase in the number of hours an individual sleeps per night, the number of years an individual has had diabetes will decrease by a factor of between 0.99361434 and 1.05774977, on average, adjusting for  frequency and the rest of our counfounding variables. Since our confidence interval includes 1, we cannot be certain that there is a significant relationship between hours of sleep and BMI.
+
+$\beta_2$: CI = (1.04440699 2.77900705)
+
+We are 95% confident that adjusting for hours of sleep and the other confounding variables, the average number of years of diabetes for an individual who feels depressed daily/weekly will be between 1.04440699 and 2.77900705 times the average number of years for an individual who does not. Since our confidence interval does not include 1, we can conclude that there is a significant difference in the average number of years for individuals who feel depressed daily/weekly versus those who do not. 
+
+$\beta_3$: CI = (0.59702666 2.53624507)
+
+We are 95% confident that adjusting for hours of sleep and the other confounding variables, the average number of years of diabetes for an individual who feels depressed monthly will be between 0.59702666 and 2.53624507 times the average number of years for an individual who does not. Since our confidence interval does not include 1, we can conclude that there is a significant difference in the average number of years for individuals who feel depressed monthly versus those who do not. 
+
+$\beta_4$: CI = (0.90451484 1.03783996)
+
+We are 95% confident that adjusting for our confounding variables, the average rate of change in number of years of diabetes as hours of sleep increases for an individual who feels depressed daily/weekly differs from that of an individual who does not by a factor between 0.90451484 and 1.03783996. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average rate of change in number of years as hours of sleep increases for individuals who feel depressed daily/weekly versus those who do not. 
+
+$\beta_5$: CI = (0.89959072 1.10233972)
+
+We are 95% confident that adjusting for our confounding variables, the average rate of change in number of years of diabetes as hours of sleep increases for an individual who feels depressed monthly differs from that of an individual who does not by a factor between 0.89959072 and 1.10233972. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average rate of change in number of years as hours of sleep increases for individuals who feel depressed monthly versus those who do not. 
 
 ```{r}
 # Fit nested model (primary hypothesis)
-model_nested <- lm(data = data, log(BMI) ~ HRSLEEP + log(AGE) + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na)
+model_nested <- lm(data = data, years ~ HRSLEEP + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
 
 summary(model_nested)
 ```
@@ -209,25 +267,25 @@ $H_a: \beta_1 \ne 0$
 
 $\alpha = 0.05$
 
-t-value = -6.529 6.80e-11 
+t-value = 0.994
 
-p-value = 6.80e-11
+p-value = 0.320287
 
-Since our p-value of 6.80e-11 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that there is a significant linear relationship between the number of hours of sleep and individual gets per night and their BMI, adjusting for our confounding variables. However, we must use this conclusion with caution because the constant variance condition for our model is not met.
+Since our p-value of 0.320287 is more than 0.05, we fail to reject the null hypothesis and conclude that there is no significant linear relationship between the number of hours of sleep and individual gets per night and the number of years they have had diabetes, adjusting for our confounding variables.
 
 ## 95% Confidence Intervals
-
-$\beta_1$: CI = (0.9919827, 0.9956772)
-
-We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's BMI will decrease by a factor of between 0.992 and 0.996, on average, from the average BMI for an individual who gets one fewer hour of sleep per night, adjusting for our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and BMI.
 
 ```{r}
 exp(confint(model_nested))
 ```
 
+$\beta_1$: CI = (0.98690528 1.04112272)
+
+We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's BMI will decrease by a factor of between 0.98690528 1.04112272, on average, from the average BMI for an individual who gets one fewer hour of sleep per night, adjusting for our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and BMI.
+
 ## Nested F-Test
 
-$H_0: \beta_2 = \beta_3 = 0$ 
+$H_0: \beta_2 = \beta_3 = \beta_4 = \beta_5 = 0$ 
 
 $H_a: \beta_i \ne 0$
 
@@ -252,7 +310,7 @@ The nested-F test is $$Nested F = \frac{\frac{SSM_\text{full}-SSM_\text{nested}}
 
 In this case, we have $Nested F = \frac{\frac{35.38-35.26}{2}}{\frac{683.85}{19861-10-1}} = \frac{\frac{0.12}{2}}{0.034} = \frac{0.06}{0.034} = 1.76$
 
-The value of the nested F-statistic is 1.76 on a distribution with 2 degrees of freedom on the numerator and 1948 degrees of freedom on the denominator. This yields a p-value of 0.15, which is not significant at the alpha = 0.05 level. We therefore fail to reject the null hypothesis that the the full model including the worry frequency and worry frequency/hours of sleep interaction variable performs better than the nested model based on hours of sleep alone.
+The value of the nested F-statistic is 5.7274 on a distribution with 4 degrees of freedom on the numerator and 21224 degrees of freedom on the denominator. This yields a p-value of 2.753e-05, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the the full model including depression frequency and depression frequency/hours of sleep interaction variables performs better than the nested model based on hours of sleep alone.
 
 # Logistic Model
 ```{r}
@@ -261,7 +319,7 @@ data_binary <- data %>%
   mutate(diab_binary = ifelse(years > 0, 1, 0))
 
 # Fit logistic model
-model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + activity_score + SEX + income_high + income_middle + health_binary + race_asian + race_black + race_na, family = binomial, data = data_binary)
+model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
 
 summary(model_logistic)
 ```
@@ -279,7 +337,7 @@ $\widehat{log(odds)} = -0.3677627 + -0.0670549\cdot HRSLEEP + -0.4598034\cdot wo
 
 # Linearity
 
-The empirical logit plot seems approximately linear, except for one outlier-- the point representing the group with greatest number of hours of sleep.
+The empirical logit plot seems approximately linear.
 
 ```{r, warning = FALSE, message = FALSE}
 # Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
@@ -317,11 +375,11 @@ $H_a: \beta_1 \ne 0$
 
 $\alpha = 0.05$
 
-z-value = -5.438  
+z-value = 0.358  
 
-p-value = 5.38e-08
+p-value = 0.72002
 
-Since our p-value of 5.38e-08 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that there is a significant relationship between the number of hours of sleep and individual gets per night and their likelihood of having a BMI that classifies them as obese, adjusting for worry frequency and the rest of our confounding variables. 
+Since our p-value of 0.72002 is more than 0.05, we fail to reject the null hypothesis that there is no significant relationship between the number of hours of sleep and individual gets per night and their likelihood of having diabetes, adjusting for depression frequency and the rest of our confounding variables. 
 
 $\beta_2$: 
 
@@ -331,11 +389,11 @@ $H_a: \beta_2 \ne 0$
 
 $\alpha = 0.05$
 
-z-value = -2.243 0.024896    
+z-value = 2.928 
 
-p-value = 0.024896
+p-value = 0.00341
 
-Since our p-value of 0.024896 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that on average, adjusting for hours of sleep and the rest of our confounding variables, an individual's likelihood of being obese differs depending on whether they worry daily or not. 
+Since our p-value of 0.00341 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that on average, adjusting for hours of sleep and the rest of our confounding variables, an individual's likelihood of having diabetes differs depending on whether they feel depressed daily/weekly or not. 
 
 $\beta_3$: 
 
@@ -345,29 +403,65 @@ $H_a: \beta_3 \ne 0$
 
 $\alpha = 0.05$
 
-z-value = 2.445 0.014482      
+z-value = 0.456    
 
-p-value = 0.014482
+p-value = 0.64860
 
-Since our p-value of 0.014482 is less than 0.05, we have strong evidence to reject the null hypothesis and conclude that adjusting for our confounding variables, on average, the rate of change of an individual's odds of obesity as hours of sleep increases differs for individuals who worry daily versus those who do not. 
+Since our p-value of 0.64860 is more than 0.05, we fail to reject the null hypothesis that on average, adjusting for hours of sleep and the rest of our confounding variables, an individual's likelihood of having diabetes does not differ depending on whether they feel depressed monthly or not. 
+
+$\beta_4$: 
+
+$H_0: \beta_4 = 0$ 
+
+$H_a: \beta_4 \ne 0$
+
+$\alpha = 0.05$
+
+z-value = -0.923    
+
+p-value = 0.35585
+
+Since our p-value of 0.35585 is more than 0.05, we fail to reject the null hypothesis that adjusting for our confounding variables, on average, the rate of change of an individual's odds of having diabetes as hours of sleep increases does not differ for individuals who feel depressed daily/weekly versus those who do not. 
+
+$\beta_5$: 
+
+$H_0: \beta_5 = 0$ 
+
+$H_a: \beta_5 \ne 0$
+
+$\alpha = 0.05$
+
+z-value = 0.463   
+
+p-value = 0.64349
+
+Since our p-value of 0.64349 is more than 0.05, we fail to reject the null hypothesis that adjusting for our confounding variables, on average, the rate of change of an individual's odds of having diabetes as hours of sleep increases does not differ for individuals who feel depressed monthly versus those who do not. 
 
 ## 95% Confidence Intervals
-
-$\beta_1$: CI = (0.9127667, 0.9579719)
-
-We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's odds of being classified as obese will decrease by a factor of between 0.913 and 0.958, on average, from the average odds of being obese for an individual who gets one fewer hour of sleep per night, adjusting for worry frequency and the rest of our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and likelihood of being obese.
-
-$\beta_2$: CI = (0.4222978, 0.9436237)
-
-We are 95% confident that adjusting for hours of sleep and the other confounding variables, on average, the odds of being obese for an individual who worries daily decreases by a factor between 0.422 and 0.943 from the odds of being obese for an individual who does not worry daily. Since our confidence interval does not include 1, this indicates that there is a significant difference in the odds of being obese between individuals who worry daily and those who do not. 
-
-$\beta_3$: CI = (1.0141055, 1.1369377)
-
-We are 95% confident that adjusting for our confounding variables, the magnitude of the average rate of change of the odds of obesity as hours of sleep increases for an individual who worries daily is between 1.014 and 1.137 times the rate of change of an individual who does not worry daily. Since our confidence interval does not include 1, this indicates that the average rate of change of the odds of obesity differs significantly for individuals who worry daily versus those who do not. 
 
 ```{r, message = FALSE}
 exp(confint(model_logistic))
 ```
+
+$\beta_1$: CI = (9.400140e-01 1.089396e+00)
+
+We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's odds of having diabetes will decrease by a factor of between 9.400140e-01 and 1.089396e+00, on average, adjusting for depression frequency and the rest of our counfounding variables. Since our confidence interval includes 1, we are not certain that there is a significant relationship between hours of sleep and likelihood of having diabetes.
+
+$\beta_2$: CI = (1.538202e+00 8.944554e+00)
+
+We are 95% confident that adjusting for hours of sleep and the other confounding variables, on average, the odds of having diabetes for an individual who feels depressed weekly/daily decreases by a factor between 1.538202e+00 8.944554e+00 from the odds of diabetes for an individual who does not. Since our confidence interval does not include 1, this indicates that there is a significant difference in the odds of having diabetes between individuals who feel depressed daily/weekly and those who do not. 
+
+$\beta_3$: CI = (3.350283e-01 5.819625e+00)
+
+We are 95% confident that adjusting for hours of sleep and the other confounding variables, on average, the odds of having diabetes for an individual who feels depressed monthly decreases by a factor between 1.538202e+00 8.944554e+00 from the odds of diabetes for an individual who does not. Since our confidence interval does not include 1, this indicates that there is a significant difference in the odds of having diabetes between individuals who feel depressed monthly and those who do not. 
+
+$\beta_4$: CI = (8.367457e-01 1.065370e+00)
+
+We are 95% confident that adjusting for our confounding variables, the magnitude of the average rate of change of the odds of diabetes as hours of sleep increases for an individual who feels depressed daily/weekly is between 8.367457e-01 1.065370e+00 times the rate of change of an individual who does not. Since our confidence interval does not include 1, this indicates that the average rate of change of the odds of diabetes differs significantly for individuals who feel depressed daily/weekly versus those who do not.
+
+$\beta_5$: CI = (8.600010e-01 1.257594e+00)
+
+We are 95% confident that adjusting for our confounding variables, the magnitude of the average rate of change of the odds of diabetes as hours of sleep increases for an individual who feels depressed monthly is between 8.600010e-01 1.257594e+00 times the rate of change of an individual who does not. Since our confidence interval includes 1, we are not certain that the average rate of change of the odds of diabetes differs significantly for individuals who feel depressed monthly versus those who do not.
 
 ## Likelihood Ratio Test
 
@@ -383,7 +477,7 @@ require(lmtest)
 lrtest(model_logistic)
 ```
 
-The $-2log(L)$ values are $-2\cdot -12154 = 24308$ and $-2\cdot -11800 = 23600$ for the null model and full logistic model, respectively. This yields a G-statistic of 24308 - (23600) = 708. Compared to a chi-distribution with 12 degrees of freedom, the p-value is less than 2.2e-16, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the multiple logistic regression model based on sleep, worry frequency, and the interaction between sleep and worry frequency is effective at explaining the probability of being obese.
+The $-2log(L)$ values are $-2\cdot -2012.5 = 4025$ and $-2\cdot -1635.1 = 3270.2$ for the null model and full logistic model, respectively. This yields a G-statistic of 24308 - (23600) = 754.8. Compared to a chi-distribution with 14 degrees of freedom, the p-value is less than 2.2e-16, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the multiple logistic regression model based on sleep, depression frequency, and the interaction between sleep and depression frequency is effective at explaining the probability of being diabetic.
 
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20

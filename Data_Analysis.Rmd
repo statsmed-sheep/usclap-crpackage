@@ -319,7 +319,7 @@ data_binary <- data %>%
   mutate(diab_binary = ifelse(years > 0, 1, 0))
 
 # Fit logistic model
-model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
+model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + health_binary + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
 
 summary(model_logistic)
 

@@ -1,0 +1,159 @@
+---
+title: "Data_Visualization"
+author: "Rose Porta"
+date: "5/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# read in data
+data <- read.csv("data.csv")
+```
+
+```{r}
+data2 <- data %>% 
+  group_by(chronic) %>% 
+  summarise(often_count = sum(depfreq_often),
+            monthly_count = sum(depfreq_monthly),
+            rarely_count = n() - (often_count + monthly_count)) %>% 
+  pivot_longer(names_to = "frequency", values_to = "count", cols = -chronic)
+
+ggplot(data2, aes(x = frequency, y = count, fill = as_factor(chronic))) +
+  geom_col(position = "dodge")
+```
+```{r}
+# Create binary diabetes variable -- 1 = has diabetes, 0 = does not have diabetes
+data_binary <- data %>% 
+  mutate(diab_binary = ifelse(years > 0, 1, 0))
+
+# Fit logistic model
+model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
+```
+
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds <- augment(x=model_logistic, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs<- preds %>%
+  select(prob,lci,uci, depfreq_often , HRSLEEP)
+```
+
+```{r}
+# code from Logistic Regression visualizationpractice activity 4/20/20
+probs <- probs %>%
+  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
+  group_by(HRSLEEP, depfreq_often) %>%
+  slice(1)
+ggplot(probs, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+      geom_pointrange(aes(ymin = lci, ymax = uci),
+                      position = position_dodge(width = 3),
+                      size = .75) +
+        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        theme_bw()
+```
+
+```{r}
+# Data 1: only women
+data1 <- data_binary %>% 
+  filter(SEX == 1)
+
+model_logistic1 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
+```
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_women <- augment(x=model_logistic1, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_women<- preds_women %>%
+  select(prob,lci,uci, depfreq_often , HRSLEEP)
+```
+
+```{r}
+# code from Logistic Regression visualizationpractice activity 4/20/20
+probs_women <- probs_women %>%
+  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
+  group_by(HRSLEEP, depfreq_often) %>%
+  slice(1)
+
+ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+      geom_pointrange(aes(ymin = lci, ymax = uci),
+                      position = position_dodge(width = 3),
+                      size = .75) +
+        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        theme_bw()
+```
+```{r}
+# Data 2: only men
+data2 <- data_binary %>% 
+  filter(SEX == 0)
+
+model_logistic2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
+```
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_men <- augment(x=model_logistic2, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_men<- preds_men %>%
+  select(prob,lci,uci, depfreq_often , HRSLEEP)
+```
+
+```{r}
+# code from Logistic Regression visualizationpractice activity 4/20/20
+probs_men <- probs_men %>%
+  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
+  group_by(HRSLEEP, depfreq_often) %>%
+  slice(1)
+
+ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+      geom_pointrange(aes(ymin = lci, ymax = uci),
+                      position = position_dodge(width = 3),
+                      size = .75) +
+        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        theme_bw()
+```
+
+```{r}
+# no confounders
+model2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data_binary, family = binomial)
+```
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_general <- augment(x=model2, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_general<- preds_general %>%
+  select(prob,lci,uci, depfreq_often , HRSLEEP)
+```
+
+```{r}
+# code from Logistic Regression visualizationpractice activity 4/20/20
+probs_general <- probs_general %>%
+  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
+  group_by(HRSLEEP, depfreq_often) %>%
+  slice(1)
+
+ggplot(probs_general, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+      geom_pointrange(aes(ymin = lci, ymax = uci),
+                      position = position_dodge(width = 3),
+                      size = .75) +
+        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        theme_bw()
+```

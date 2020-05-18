@@ -4,313 +4,9 @@ author: "Rose Porta and Clara Li"
 date: "05/16/2020"
 output: html_document
 ---
-
 ```{r}
-# bringing in data from appendix
 data <- read.csv("data.csv")
-
-library(tidyverse)
-library(broom)
-library(gtools)
 ```
-
-
-```{r}
-# Fit full model with years as response
-# Original model
-model_full <- lm(data = data, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + AGE + SEX + BMI + activity_score + health_binary + income_high + income_middle + race_asian + race_black + race_na)
-
-summary(model_full)
-
-# Result: nothing of interest is significant
-
-# Trying out transformations: removed health_binary (collinearity issues), tried log(AGE)
-
-model_full <- lm(data = data, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
-
-summary(model_full)
-
-# Results for data (everyone):
-# removed health_binary: depfreq_often significant, p-val = 0.03512
-# removed health_binary, log(AGE): depfreq_often significant, p-val = 0.032844
-
-# Examining sex differences separately
-# Allows us to see if relationship is significant for only males, only females, or both
-
-# Data 1: only women
-data1 <- data %>% 
-  filter(SEX == 1)
-
-model_full1 <- lm(data = data1, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
-
-summary(model_full1)
-
-# Results for data1:
-# HRSLEEP significant at 0.10 level, p-value = 0.094166
-# depfreq_often significant at 0.01 level, p-value = 0.003030
-# I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
-
-# Data 2: only men
-data2 <- data %>% 
-  filter(SEX == 0)
-
-model_full2 <- lm(data = data2, formula = years ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
-
-summary(model_full2)
-
-# Result for data2: nothing of interest is significant
-```
-(Not updated)
-Multiple Regression Model: 
-
-$log(BMI) = \beta_0 + \beta_1\cdot HRSLEEP + \beta_2\cdot worfreq\_binary + \beta_3\cdot HRSLEEP\cdot worfreq\_binary + \beta_4\cdot log(AGE) + \beta_5\cdot activity\_score + \beta_6\cdot SEX + \beta_7\cdot income\_high + \beta_8\cdot income\_middle + \beta_9\cdot health\_binary + \beta_10\cdot race\_asian + \beta_11\cdot race\_black + \beta_12\cdot race\_na$
-
-Fitted Model: 
-
-$\widehat{log(BMI)} = \hat{\beta_0} + \hat{\beta_1}\cdot HRSLEEP + \hat{\beta_2}\cdot worfreq\_binary + \hat{\beta_3}\cdot HRSLEEP\cdot worfreq\_binary + \hat{\beta_4}\cdot log(AGE) + \hat{\beta_5}\cdot activity\_score + \hat{\beta_6}\cdot SEX + \hat{\beta_7}\cdot income\_high + \hat{\beta_8}\cdot income\_middle + \hat{\beta_9}\cdot health\_binary + \hat{\beta_10}\cdot race\_asian + \hat{\beta_11}\cdot race\_black + \hat{\beta_12}\cdot race\_na$
-
-$\widehat{log(BMI)} = 3.290 + -0.006995\cdot HRSLEEP + -0.03280\cdot worfreq\_binary + 0.004940\cdot HRSLEEP\cdot worfreq\_binary + 0.02174\cdot log(AGE) + 0.00003110\cdot activity\_score + -0.02431\cdot SEX + 0.001094\cdot income\_high + 0.02276\cdot income\_middle + -0.04392\cdot health\_binary + -0.07999\cdot race\_asian + 0.03856\cdot race\_black + 0.05196\cdot race\_na$
-
-# Check Regression Assumptions
-
-## Linearity
-
-Since our sample size is so large, it is difficult to determine from the scatterplots whether or not the relationship is linear, but there is no clear non-linear pattern, so the linearity assumption is reasonable.
-
-```{r, warning = FALSE, message = FALSE}
-# Create scatter plot of years versus hours of sleep
-ggplot(data, aes(x = HRSLEEP, y = years))+
-  geom_point(alpha = 0.1) + 
-  geom_jitter() +
-  geom_smooth(method = lm, se = FALSE)
-```
-
-```{r}
-# Facet scatterplot by depression frequency
-ggplot(data, aes(x = HRSLEEP, y = years))+
-  geom_point(alpha = 0.1) + 
-  geom_jitter() +
-  facet_wrap(~depfreq_often) +
-  geom_smooth(method = lm, se = FALSE)
-```
-
-```{r}
-# Facet scatterplot by depression frequency
-ggplot(data, aes(x = HRSLEEP, y = years))+
-  geom_point(alpha = 0.1) + 
-  geom_jitter() +
-  facet_wrap(~depfreq_monthly) +
-  geom_smooth(method = lm, se = FALSE)
-```
-## Constant Variance
-
-The residuals versus fitted values plot below shows no patterns and only random scatter, so the constant variance assumption is reasonable.***
-
-```{r}
-# Code from Rose's Exam 1
-# Creates table of residuals stored in m1_data
-m1_data<-augment(model_full)
-
-# Creates residuals vs. fitted plot
-ggplot(data = m1_data, aes(x = .fitted, y = .resid))+
-  geom_point()+
-  labs(title = "Residuals Versus Fitted Plot")
-
-```
-## Normality
-
-Using just BMI as the response,the Normal Q-Q plot is clearly curved, and the histogram of residuals shows a clearly skewed distribution, so the normality assumption is violated. No transformations appear to alleviate this skewedness.***
-
-```{r, message = FALSE}
-ggplot(data = m1_data, aes(sample = .resid))+
-  geom_qq()+
-  labs(title = "Q-Q Plot")
-
-# Generates histogram of residuals
-ggplot(data = m1_data, aes(x = .resid))+
-  geom_histogram()+
-  labs(title = "Histogram of Residuals")
-```
-## Randomness
-
-Our data is based on a random sample, so the randomness assumption is met. 
-
-## Independence
-
-Only one adult from each household was chosen for the survey, so it is reasonable to assume that one sampled individual's BMI would not impact any other sampled individual's BMI, so independence is reasonable. 
-
-# Significance Tests:
-
-## T-test for slope:
-
-$\beta_1$: 
-
-$H_0: \beta_1 = 0$ 
-
-$H_a: \beta_1 \ne 0$
-
-$\alpha = 0.05$
-
-t-value = 1.559
-
-p-value = 0.119109    
-
-Since our p-value of 0.119109 is greater than 0.05, we fail to reject the null hypothesis and conclude that there is no significant linear relationship between the number of hours of sleep an individual gets per night and the years of diabetes they have had, adjusting for depression frequency and the rest of our confounding variables.
-
-$\beta_2$: 
-
-$H_0: \beta_2 = 0$ 
-
-$H_a: \beta_2 \ne 0$
-
-$\alpha = 0.05$
-
-t-value = 2.134    
-
-p-value = 0.032844
-
-Since our p-value of 0.032844 is less than 0.05, we reject the null hypothesis and conclude that there is a significant difference between the intercepts of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed daily or weekly, adjusting for the rest of our confounding variables. 
-
-$\beta_3$: 
-
-$H_0: \beta_3 = 0$ 
-
-$H_a: \beta_3 \ne 0$
-
-$\alpha = 0.05$
-
-t-value = 0.562      
-
-p-value = 0.573982
-
-Since our p-value of 0.573982 is greater than 0.05, we fail to reject the null hypothesis and conclude that there is no significant difference between the intercepts of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed monthly, adjusting for the rest of our confounding variables.
-
-$\beta_4$: 
-
-$H_0: \beta_4 = 0$ 
-
-$H_a: \beta_4 \ne 0$
-
-$\alpha = 0.05$
-
-t-value = -0.901      
-
-p-value = 0.367520
-
-Since our p-value of 0.367520 is greater than 0.05, we have fail to reject the null hypothesis and conclude that there is no significant difference between the slopes of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed daily or weekly, adjusting for the rest of our confounding variables.
-
-$\beta_5$: 
-
-$H_0: \beta_5 = 0$ 
-
-$H_a: \beta_5 \ne 0$
-
-$\alpha = 0.05$
-
-t-value = -0.081      
-
-p-value = 0.935587
-
-Since our p-value of 0.935587 is greater than 0.05, we have fail to reject the null hypothesis and conclude that there is no no significant difference between the slopes of the regression lines predicting years of diabetes from hours of sleep for individuals feel depressed monthly, adjusting for the rest of our confounding variables.
-
-## 95% Confidence Intervals
-
-```{r}
-exp(confint(model_full))
-```
-
-$\beta_1$: CI = (0.99361434 1.05774977)
-
-We are 95% confident that for each hour increase in the number of hours an individual sleeps per night, the number of years an individual has had diabetes will decrease by a factor of between 0.99361434 and 1.05774977, on average, adjusting for  frequency and the rest of our counfounding variables. Since our confidence interval includes 1, we cannot be certain that there is a significant relationship between hours of sleep and BMI.
-
-$\beta_2$: CI = (1.04440699 2.77900705)
-
-We are 95% confident that adjusting for hours of sleep and the other confounding variables, the average number of years of diabetes for an individual who feels depressed daily/weekly will be between 1.04440699 and 2.77900705 times the average number of years for an individual who does not. Since our confidence interval does not include 1, we can conclude that there is a significant difference in the average number of years for individuals who feel depressed daily/weekly versus those who do not. 
-
-$\beta_3$: CI = (0.59702666 2.53624507)
-
-We are 95% confident that adjusting for hours of sleep and the other confounding variables, the average number of years of diabetes for an individual who feels depressed monthly will be between 0.59702666 and 2.53624507 times the average number of years for an individual who does not. Since our confidence interval does not include 1, we can conclude that there is a significant difference in the average number of years for individuals who feel depressed monthly versus those who do not. 
-
-$\beta_4$: CI = (0.90451484 1.03783996)
-
-We are 95% confident that adjusting for our confounding variables, the average rate of change in number of years of diabetes as hours of sleep increases for an individual who feels depressed daily/weekly differs from that of an individual who does not by a factor between 0.90451484 and 1.03783996. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average rate of change in number of years as hours of sleep increases for individuals who feel depressed daily/weekly versus those who do not. 
-
-$\beta_5$: CI = (0.89959072 1.10233972)
-
-We are 95% confident that adjusting for our confounding variables, the average rate of change in number of years of diabetes as hours of sleep increases for an individual who feels depressed monthly differs from that of an individual who does not by a factor between 0.89959072 and 1.10233972. Since our confidence interval includes 1, we cannot be certain that there is a significant difference in the average rate of change in number of years as hours of sleep increases for individuals who feel depressed monthly versus those who do not. 
-
-```{r}
-# Fit nested model (primary hypothesis)
-model_nested <- lm(data = data, years ~ HRSLEEP + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na)
-
-summary(model_nested)
-```
-Nested Multiple Regression Model: 
-
-$BMI = \beta_0 + \beta_1\cdot HRSLEEP + \beta_2\cdot log(AGE) + \beta_3\cdot activity\_score + \beta_4\cdot SEX + \beta_5\cdot income\_high + \beta_6\cdot income\_middle + \beta_7\cdot health\_binary + \beta_8\cdot race\_asian + \beta_9\cdot race\_black + \beta_10\cdot race\_na$
-
-Fitted Model: 
-
-$\widehat{BMI} = \hat{\beta_0} + \hat{\beta_1}\cdot HRSLEEP + \hat{\beta_2}\cdot log(AGE) + \hat{\beta_3}\cdot activity\_score + \hat{\beta_4}\cdot SEX + \hat{\beta_5}\cdot income\_high + \hat{\beta_6}\cdot income\_middle + \hat{\beta_7}\cdot health\_binary + \hat{\beta_8}\cdot race\_asian + \hat{\beta_9}\cdot race\_black + \hat{\beta_10}\cdot race\_na$
-
-$\widehat{BMI} = 3.285 + -0.006191\cdot HRSLEEP + 0.02160\cdot log(AGE) + 0.00003109\cdot activity\_score + -0.02438\cdot SEX + 0.001182\cdot income\_high + 0.02279\cdot income\_middle + -0.04396\cdot health\_binary + -0.08005\cdot race\_asian + 0.03855\cdot race\_black + 0.05177\cdot race\_na$
-
-# Significance Tests:
-
-## T-test for slope:
-
-$\beta_1$: 
-
-$H_0: \beta_1 = 0$ 
-
-$H_a: \beta_1 \ne 0$
-
-$\alpha = 0.05$
-
-t-value = 0.994
-
-p-value = 0.320287
-
-Since our p-value of 0.320287 is more than 0.05, we fail to reject the null hypothesis and conclude that there is no significant linear relationship between the number of hours of sleep and individual gets per night and the number of years they have had diabetes, adjusting for our confounding variables.
-
-## 95% Confidence Intervals
-
-```{r}
-exp(confint(model_nested))
-```
-
-$\beta_1$: CI = (0.98690528 1.04112272)
-
-We are 95% confident that for each hour increase in the number of hours and individual sleeps per night, an individual's BMI will decrease by a factor of between 0.98690528 1.04112272, on average, from the average BMI for an individual who gets one fewer hour of sleep per night, adjusting for our counfounding variables. Since our confidence interval does not include 1, this indicates that there is a significant relationship between hours of sleep and BMI.
-
-## Nested F-Test
-
-$H_0: \beta_2 = \beta_3 = \beta_4 = \beta_5 = 0$ 
-
-$H_a: \beta_i \ne 0$
-
-$\alpha = 0.05$
-
-### Nested Model
-```{r}
-anova(model_nested)
-```
-
-### Full Model
-```{r}
-anova(model_full)
-```
-
-##### Nested F Test
-```{r}
-anova(model_nested, model_full)
-```
-
-The nested-F test is $$Nested F = \frac{\frac{SSM_\text{full}-SSM_\text{nested}}{\text{Number of predictors}}}{\frac{SSE_\text{Full}}{n-k-1}}$$
-
-In this case, we have $Nested F = \frac{\frac{35.38-35.26}{2}}{\frac{683.85}{19861-10-1}} = \frac{\frac{0.12}{2}}{0.034} = \frac{0.06}{0.034} = 1.76$
-
-The value of the nested F-statistic is 5.7274 on a distribution with 4 degrees of freedom on the numerator and 21224 degrees of freedom on the denominator. This yields a p-value of 2.753e-05, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the the full model including depression frequency and depression frequency/hours of sleep interaction variables performs better than the nested model based on hours of sleep alone.
 
 # Logistic Model
 ```{r}
@@ -324,12 +20,12 @@ model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + 
 summary(model_logistic)
 
 # Data 1: only women
-data1 <- data %>% 
+data1 <- data_binary %>% 
   filter(SEX == 1)
 
-model_logistic1 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
+model_logistic1 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
 
-summary(model_full1)
+summary(model_logistic1)
 
 # Results for data1:
 # HRSLEEP significant at 0.10 level, p-value = 0.094166
@@ -337,24 +33,20 @@ summary(model_full1)
 # I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
 
 # Data 2: only men
-data2 <- data %>% 
+data2 <- data_binary %>% 
   filter(SEX == 0)
 
-model_logistic2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
+model_logistic2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
 
 summary(model_logistic2)
 
 # Result for data2: nothing of interest is significant
+
+model2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data_binary, family = binomial)
+summary(model2)
+            
 ```
-Multiple Logistic Regression Model: 
 
-$log(odds) = \beta_0 + \beta_1\cdot HRSLEEP + \beta_2\cdot worfreq\_binary + \beta_3\cdot HRSLEEP\cdot worfreq\_binary + \beta_4\cdot log(AGE) + \beta_5\cdot activity\_score + \beta_6\cdot SEX + \beta_7\cdot income\_high + \beta_8\cdot income\_middle + \beta_9\cdot health\_binary + \beta_10\cdot race\_asian + \beta_11\cdot race\_black + \beta_12\cdot race\_na$
-
-Fitted Model: 
-
-$\widehat{log(odds)} = \hat{\beta_0} + \hat{\beta_1}\cdot HRSLEEP + \hat{\beta_2}\cdot worfreq\_binary + \hat{\beta_3}\cdot HRSLEEP\cdot worfreq\_binary + \hat{\beta_4}\cdot log(AGE) + \hat{\beta_5}\cdot activity\_score + \hat{\beta_6}\cdot SEX + \hat{\beta_7}\cdot income\_high + \hat{\beta_8}\cdot income\_middle + \hat{\beta_9}\cdot health\_binary + \hat{\beta_10}\cdot race\_asian + \hat{\beta_11}\cdot race\_black + \hat{\beta_12}\cdot race\_na$
-
-$\widehat{log(odds)} = -0.3677627 + -0.0670549\cdot HRSLEEP + -0.4598034\cdot worfreq\_binary + 0.0712617\cdot HRSLEEP\cdot worfreq\_binary + 0.0039689\cdot log(AGE) + 0.0003783\cdot activity\_score + -0.0066830\cdot SEX + -0.0453890\cdot income\_high + 0.1994200\cdot income\_middle + -0.4537598\cdot health\_binary + -1.0034365\cdot race\_asian + 0.2860679\cdot race\_black + 0.4187123\cdot race\_na$
 
 ## Checking Regression Assumptions: 
 
@@ -387,7 +79,7 @@ Obviously, individuals are not assigned BMIs by a spinner model, but since we ha
 As established above for the linear regression model, the independence assumption is reasonable for this data set.
 
 ```{r}
-
+data.cor = cor(data_binary)
 ```
 
 # Significance Tests: 

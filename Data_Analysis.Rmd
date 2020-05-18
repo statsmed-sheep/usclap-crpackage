@@ -322,6 +322,29 @@ data_binary <- data %>%
 model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
 
 summary(model_logistic)
+
+# Data 1: only women
+data1 <- data %>% 
+  filter(SEX == 1)
+
+model_logistic1 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
+
+summary(model_full1)
+
+# Results for data1:
+# HRSLEEP significant at 0.10 level, p-value = 0.094166
+# depfreq_often significant at 0.01 level, p-value = 0.003030
+# I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
+
+# Data 2: only men
+data2 <- data %>% 
+  filter(SEX == 0)
+
+model_logistic2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
+
+summary(model_logistic2)
+
+# Result for data2: nothing of interest is significant
 ```
 Multiple Logistic Regression Model: 
 
@@ -361,7 +384,11 @@ Obviously, individuals are not assigned BMIs by a spinner model, but since we ha
 
 ## Independence
 
-As established above for the linear regression model, the independence assumption is reasonable for this data set. 
+As established above for the linear regression model, the independence assumption is reasonable for this data set.
+
+```{r}
+
+```
 
 # Significance Tests: 
 

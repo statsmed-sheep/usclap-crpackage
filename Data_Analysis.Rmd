@@ -14,22 +14,18 @@ library(gtools)
 
 # Logistic Model
 ```{r}
-# Create binary diabetes variable -- 1 = has diabetes, 0 = does not have diabetes
-data_binary <- data %>% 
-  mutate(diab_binary = ifelse(years > 0, 1, 0))
-
 # Fit logistic model
 model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + health_binary + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
 
-summary(model_logistic)
+summary(model_full)
 
 # Data 1: only women
-data1 <- data_binary %>% 
+data1 <- data %>% 
   filter(SEX == 1)
 
-model_logistic1 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
+model_women <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na + health_binary, family = binomial, data = data1)
 
-summary(model_logistic1)
+summary(model_women)
 
 # Results for data1:
 # HRSLEEP significant at 0.10 level, p-value = 0.094166
@@ -37,17 +33,20 @@ summary(model_logistic1)
 # I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
 
 # Data 2: only men
-data2 <- data_binary %>% 
+data2 <- data %>% 
   filter(SEX == 0)
 
-model_logistic2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
+model_men <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na + health_binary, family = binomial, data = data2)
 
-summary(model_logistic2)
+summary(model_men)
 
 # Result for data2: nothing of interest is significant
 
-model2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data_binary, family = binomial)
-summary(model2)
+# Fit model without confounders
+
+model_simple <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data, family = binomial)
+
+summary(model_simple)
             
 ```
 
@@ -60,12 +59,12 @@ The empirical logit plot seems approximately linear.
 
 ```{r, warning = FALSE, message = FALSE}
 # Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
-data_bin <- data_binary %>%
+data_bin <- data %>%
   # Break HRSLEEP into 10 bins
   mutate(HRSLEEP_group = cut(HRSLEEP, breaks=10)) %>% 
   group_by(HRSLEEP_group) %>%
   # calculate mean HRSLEEP value and proportion obese in each bin
-  mutate(binned.y = mean(diab_binary), binned.x = mean(HRSLEEP)) %>% 
+  mutate(binned.y = mean(chronic), binned.x = mean(HRSLEEP)) %>% 
   # transform binned.y from proportion to log(odds)
   mutate(binned.y_logit = logit(binned.y))
 
@@ -83,7 +82,7 @@ Obviously, individuals are not assigned BMIs by a spinner model, but since we ha
 As established above for the linear regression model, the independence assumption is reasonable for this data set.
 
 ```{r}
-data.cor = cor(data_binary)
+data.cor = cor(data)
 ```
 
 # Significance Tests: 
@@ -186,7 +185,7 @@ $\beta_5$: CI = (8.600010e-01 1.257594e+00)
 
 We are 95% confident that adjusting for our confounding variables, the magnitude of the average rate of change of the odds of diabetes as hours of sleep increases for an individual who feels depressed monthly is between 8.600010e-01 1.257594e+00 times the rate of change of an individual who does not. Since our confidence interval includes 1, we are not certain that the average rate of change of the odds of diabetes differs significantly for individuals who feel depressed monthly versus those who do not.
 
-## Likelihood Ratio Test
+## Likelihood Ratio Tests
 
 $H_0: \beta_i = 0$ 
 
@@ -197,22 +196,86 @@ $\alpha = 0.05$
 ```{r}
 # Load necessary package
 require(lmtest)
-lrtest(model_logistic)
+
+# Full model
+lrtest(model_full)
 ```
 
 The $-2log(L)$ values are $-2\cdot -2012.5 = 4025$ and $-2\cdot -1635.1 = 3270.2$ for the null model and full logistic model, respectively. This yields a G-statistic of 24308 - (23600) = 754.8. Compared to a chi-distribution with 14 degrees of freedom, the p-value is less than 2.2e-16, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the multiple logistic regression model based on sleep, depression frequency, and the interaction between sleep and depression frequency is effective at explaining the probability of being diabetic.
 
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
-preds <- augment(x=model_logistic, type.predict = "response") %>%
+preds_full <- augment(x=model_full, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
+probs_full<- preds_full %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+
+library(InformationValue)
+Concordance(probs_full$chronic, probs_full$prob)
+```
+```{r}
+# women
+lrtest(model_women)
+```
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_women <- augment(x=model_women, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_women <- preds_women %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+
+library(InformationValue)
+Concordance(probs_women$chronic, probs_women$prob)
+```
+```{r}
+# men
+lrtest(model_men)
+```
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_men <- augment(x=model_men, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+<<<<<<< HEAD
 # probs<- preds %>%
 #   select(prob,lci,uci, worfreq_binary , HRSLEEP, BMI_binary)
 # 
 # library(InformationValue)
 # Concordance(probs$BMI_binary, probs$prob)
+=======
+probs_men <- preds_men %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+
+library(InformationValue)
+Concordance(probs_men$chronic, probs_men$prob)
 ```
 
+```{r}
+# no confounders
+lrtest(model_simple)
+>>>>>>> e9d0c9e5578fcb35bf183ce18b0331a25d288bae
+```
+
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_simple <- augment(x=model_simple, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_simple <- preds_simple %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+
+library(InformationValue)
+Concordance(probs_simple$chronic, probs_simple$prob)
+```

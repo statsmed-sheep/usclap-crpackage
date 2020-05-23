@@ -12,6 +12,34 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 # read in data
 data <- read.csv("data.csv")
+
+library(tidyverse)
+library(broom)
+```
+
+# Fit Models
+```{r}
+
+# Fit full logistic model
+model_full <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na + health_binary, family = binomial, data = data)
+
+# Data 1: only women
+data1 <- data %>% 
+  filter(SEX == 1)
+
+model_women <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na + health_binary, family = binomial, data = data1)
+
+
+# Data 2: only men
+data2 <- data %>% 
+  filter(SEX == 0)
+
+model_men <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na + health_binary, family = binomial, data = data2)
+
+# Fit model without confounders
+
+model_simple <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data, family = binomial)
+            
 ```
 
 ```{r}
@@ -25,135 +53,133 @@ data2 <- data %>%
 ggplot(data2, aes(x = frequency, y = count, fill = as_factor(chronic))) +
   geom_col(position = "dodge")
 ```
-```{r}
-# Create binary diabetes variable -- 1 = has diabetes, 0 = does not have diabetes
-data_binary <- data %>% 
-  mutate(diab_binary = ifelse(years > 0, 1, 0))
 
-# Fit logistic model
-model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
-```
-
-
+# Full
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
-preds <- augment(x=model_logistic, type.predict = "response") %>%
+preds_full <- augment(x=model_full, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
-probs<- preds %>%
-  select(prob,lci,uci, depfreq_often , HRSLEEP)
+probs_full<- preds_full %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
 ```
 
-```{r}
+```{r, warning = FALSE}
 # code from Logistic Regression visualizationpractice activity 4/20/20
-probs <- probs %>%
+probs_full <- probs_full %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
+  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>%
   slice(1)
-ggplot(probs, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+
+ggplot(probs_full, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        labs(title = "Probability of having Diabetes by Sleep and Depression",
+          subtitle = "Model 1: Full Model",
+          y = "Probability of having Diabetes", 
+          x = "Hours of Sleep per Night",
+          color = "Depression Frequency") +
         theme_bw()
 ```
 
-```{r}
-# Data 1: only women
-data1 <- data_binary %>% 
-  filter(SEX == 1)
-
-model_logistic1 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
-```
-
+# Women
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
-preds_women <- augment(x=model_logistic1, type.predict = "response") %>%
+preds_women <- augment(x=model_women, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
-probs_women<- preds_women %>%
-  select(prob,lci,uci, depfreq_often , HRSLEEP)
+probs_women <- preds_women %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+
 ```
 
-```{r}
+```{r, warning = FALSE}
 # code from Logistic Regression visualizationpractice activity 4/20/20
 probs_women <- probs_women %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
+  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>%
   slice(1)
 
-ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        labs(title = "Probability of having Diabetes by Sleep and Depression",
+          subtitle = "Model 2: Women Only",
+          y = "Probability of having Diabetes", 
+          x = "Hours of Sleep per Night",
+          color = "Depression Frequency") +
         theme_bw()
 ```
-```{r}
-# Data 2: only men
-data2 <- data_binary %>% 
-  filter(SEX == 0)
 
-model_logistic2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
-```
-
+# Men
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
-preds_men <- augment(x=model_logistic2, type.predict = "response") %>%
+preds_men <- augment(x=model_men, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
-probs_men<- preds_men %>%
-  select(prob,lci,uci, depfreq_often , HRSLEEP)
+probs_men <- preds_men %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
 ```
 
-```{r}
+```{r, warning = FALSE}
 # code from Logistic Regression visualizationpractice activity 4/20/20
 probs_men <- probs_men %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
+  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>%
   slice(1)
 
-ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        labs(title = "Probability of having Diabetes by Sleep and Depression",
+          subtitle = "Model 3: Men Only",
+          y = "Probability of having Diabetes",
+          x = "Hours of Sleep per Night",
+          color = "Depression Frequency") +
         theme_bw()
 ```
 
-```{r}
-# no confounders
-model2 <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data_binary, family = binomial)
-```
-
+# No Confounders
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
-preds_general <- augment(x=model2, type.predict = "response") %>%
+preds_simple <- augment(x=model_simple, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
-probs_general<- preds_general %>%
-  select(prob,lci,uci, depfreq_often , HRSLEEP)
+probs_simple <- preds_simple %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
 ```
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 # code from Logistic Regression visualizationpractice activity 4/20/20
-probs_general <- probs_general %>%
+probs_simple <- probs_simple %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
+  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>% 
   slice(1)
 
-ggplot(probs_general, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often))) +
+ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(y = "Probability of having Diabetes", x = "Hours of Sleep per Night") +
+        labs(
+          title = "Probability of having Diabetes by Sleep and Depression",
+          subtitle = "Model 4: Simple",
+          y = "Probability of having Diabetes", 
+          x = "Hours of Sleep per Night",
+          color = "Depression Frequency") +
         theme_bw()
 ```

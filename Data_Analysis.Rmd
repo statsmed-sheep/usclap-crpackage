@@ -14,7 +14,6 @@ library(gtools)
 
 # Logistic Model
 ```{r}
-
 # Fit full logistic model
 model_full <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
 

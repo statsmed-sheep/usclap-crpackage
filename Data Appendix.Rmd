@@ -321,4 +321,7 @@ tally(~depfreq_monthly, data = data)
 ```{r}
 favstats(~years, data = data)
 ```
+```{r}
+tally(~chronic, data = data)
+```
 

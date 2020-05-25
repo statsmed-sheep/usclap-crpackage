@@ -14,8 +14,8 @@ library(gtools)
 
 # Logistic Model
 ```{r}
-# Fit logistic model
-model_logistic <- glm(diab_binary ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + health_binary + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data_binary)
+# Fit full logistic model
+model_full <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
 
 summary(model_full)
 
@@ -246,13 +246,6 @@ preds_men <- augment(x=model_men, type.predict = "response") %>%
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
-<<<<<<< HEAD
-# probs<- preds %>%
-#   select(prob,lci,uci, worfreq_binary , HRSLEEP, BMI_binary)
-# 
-# library(InformationValue)
-# Concordance(probs$BMI_binary, probs$prob)
-=======
 probs_men <- preds_men %>%
   select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
 
@@ -263,7 +256,6 @@ Concordance(probs_men$chronic, probs_men$prob)
 ```{r}
 # no confounders
 lrtest(model_simple)
->>>>>>> e9d0c9e5578fcb35bf183ce18b0331a25d288bae
 ```
 
 ```{r}

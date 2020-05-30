@@ -20,7 +20,7 @@ opts_chunk$set(
   tidy=TRUE,                     # display code as typed
   size="small",                   # slightly smaller font for code
   tidy.opts=list(width.cutoff=65), # wrap text and long comments
-  fig.width=4, fig.height=2           #figure size
+  fig.width=4, fig.height=5           #figure size
 )
 ```
 
@@ -46,7 +46,7 @@ opts_chunk$set(
 
 
   
-## Figure 1.1
+## Probability of Having Diabetes by Sleep and Depression Frequency
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
@@ -107,15 +107,14 @@ p1 <- ggplot(probs_full, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_of
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        # labs(title = "Probability of having Diabetes by Sleep and Depression",
-        #   subtitle = "Model 1: Full Model",
-        #   y = "Probability of having Diabetes", 
-        #   x = "Hours of Sleep per Night",
-        #   color = "Depression Frequency") +
+         labs(title = "Figure 1.1",
+           subtitle = "Model 1: Full Model",
+           y = "Probability (Diabetes)", 
+           x = "Sleep (hours/night)",
+           color = "Depression Frequency") +
         theme_bw()
 ```
 
-# Figure 1.2
 
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
@@ -140,15 +139,14 @@ p2 <- ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_o
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        # labs(title = "Probability of having Diabetes by Sleep and Depression",
-        #   subtitle = "Model 2: Women Only",
-        #   y = "Probability of having Diabetes", 
-        #   x = "Hours of Sleep per Night",
-        #   color = "Depression Frequency") +
+        labs(title = "Figure 1.2",
+           subtitle = "Model 2: Women Only",
+           y = "Probability (Diabetes)", 
+           x = "Sleep (hours/night)",
+           color = "Depression Frequency") +
         theme_bw()
 ```
 
-# Figure 1.3
 
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
@@ -173,15 +171,14 @@ p3 <- ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_oft
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        # labs(title = "Probability of having Diabetes by Sleep and Depression",
-        #   subtitle = "Model 3: Men Only",
-        #   y = "Probability of having Diabetes",
-        #   x = "Hours of Sleep per Night",
-        #   color = "Depression Frequency") +
+        labs(title = "Figure 1.3",
+           subtitle = "Model 3: Men Only",
+           y = "Probability (Diabetes)",
+           x = "Sleep (hours/night)",
+           color = "Depression Frequency") +
         theme_bw()
 ```
 
-# Figure 1.4
 
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
@@ -206,12 +203,12 @@ p4 <- ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        # labs(
-        #   title = "Probability of having Diabetes by Sleep and Depression",
-        #   subtitle = "Model 4: Simple",
-        #   y = "Probability of having Diabetes", 
-        #   x = "Hours of Sleep per Night",
-        #   color = "Depression Frequency") +
+         labs(
+           title = "Figure 1.4",
+           subtitle = "Model 4: Simple",
+           y = "Probability (Diabetes)", 
+           x = "Sleep (hours/night)",
+           color = "Depression Frequency") +
         theme_bw()
 ```
 

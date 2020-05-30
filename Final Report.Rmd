@@ -58,10 +58,7 @@ data <- read.csv("data.csv")
 
 library(tidyverse)
 library(broom)
-library(grid)
-library(pdp)
-library(ggplotify)
-library(gridExtra)
+library(ggpubr)
 ```
 
 ```{r}
@@ -76,7 +73,7 @@ data1 <- data %>%
 model_women <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
 
 
-# Data 2: only men
+# Data 2: only men The mechanism behind depression being significant only for diabetic women is unclear; it has been proposed that hormonal shifts in women contribute primarily to this disparity. While it 
 data2 <- data %>% 
   filter(SEX == 0)
 
@@ -85,7 +82,6 @@ model_men <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP
 # Fit model without confounders
 
 model_simple <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data, family = binomial)
-            
 ```
   
 ```{r}
@@ -111,13 +107,12 @@ p1 <- ggplot(probs_full, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_of
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 1: Full Model",
-          y = "Probability of having Diabetes", 
-          x = "Hours of Sleep per Night",
-          color = "Depression Frequency") +
+        # labs(title = "Probability of having Diabetes by Sleep and Depression",
+        #   subtitle = "Model 1: Full Model",
+        #   y = "Probability of having Diabetes", 
+        #   x = "Hours of Sleep per Night",
+        #   color = "Depression Frequency") +
         theme_bw()
-g1 <- as.grob(p1)
 ```
 
 # Figure 1.2
@@ -131,7 +126,6 @@ preds_women <- augment(x=model_women, type.predict = "response") %>%
 
 probs_women <- preds_women %>%
   select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
-
 ```
 
 ```{r, warning = FALSE}
@@ -146,13 +140,12 @@ p2 <- ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_o
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 2: Women Only",
-          y = "Probability of having Diabetes", 
-          x = "Hours of Sleep per Night",
-          color = "Depression Frequency") +
+        # labs(title = "Probability of having Diabetes by Sleep and Depression",
+        #   subtitle = "Model 2: Women Only",
+        #   y = "Probability of having Diabetes", 
+        #   x = "Hours of Sleep per Night",
+        #   color = "Depression Frequency") +
         theme_bw()
-g2 <- as.grob(p2)
 ```
 
 # Figure 1.3
@@ -180,13 +173,12 @@ p3 <- ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_oft
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 3: Men Only",
-          y = "Probability of having Diabetes",
-          x = "Hours of Sleep per Night",
-          color = "Depression Frequency") +
+        # labs(title = "Probability of having Diabetes by Sleep and Depression",
+        #   subtitle = "Model 3: Men Only",
+        #   y = "Probability of having Diabetes",
+        #   x = "Hours of Sleep per Night",
+        #   color = "Depression Frequency") +
         theme_bw()
-g3 <- as.grob(p3)
 ```
 
 # Figure 1.4
@@ -214,18 +206,20 @@ p4 <- ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_
       geom_pointrange(aes(ymin = lci, ymax = uci),
                       position = position_dodge(width = 3),
                       size = .75) +
-        labs(
-          title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 4: Simple",
-          y = "Probability of having Diabetes", 
-          x = "Hours of Sleep per Night",
-          color = "Depression Frequency") +
+        # labs(
+        #   title = "Probability of having Diabetes by Sleep and Depression",
+        #   subtitle = "Model 4: Simple",
+        #   y = "Probability of having Diabetes", 
+        #   x = "Hours of Sleep per Night",
+        #   color = "Depression Frequency") +
         theme_bw()
-
-g4 <- as.grob(p4)
 ```
 
 ```{r}
-arrangeGrob(g1, g2, ncol = 2)
+plots_combined <- ggarrange(p1, p2, p3, p4,
+          ncol = 2, nrow = 2,
+          common.legend = TRUE, legend = "bottom",
+          widths = 400, heights = 400)
+plots_combined
 ```
 

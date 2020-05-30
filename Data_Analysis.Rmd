@@ -234,6 +234,7 @@ probs_women <- preds_women %>%
 library(InformationValue)
 Concordance(probs_women$chronic, probs_women$prob)
 ```
+
 ```{r}
 # men
 lrtest(model_men)

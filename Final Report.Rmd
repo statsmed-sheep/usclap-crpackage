@@ -6,7 +6,6 @@ output:
   pdf_document: default
 editor_options:
   chunk_output_type: console
-\setmainfont{Arial}
 ---
 ```{r, include=FALSE, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 # knitr settings to control how R chunks work and how the pdf is compiled when knit.

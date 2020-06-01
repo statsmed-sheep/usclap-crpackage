@@ -31,9 +31,9 @@ opts_chunk$set(
 
 ## Background and Significance
 
-  With over 34 million Americans, or more than 1 in 10, diagnosed with the condition, diabetes is one of the most prevalent chronic diseases in the US.[^1] Diagnosed diabetics face an overall 60% greater risk of early death than non-diabetics, underlining the importance of identifying the most potent risk factors.[^2] In addition to other modifiable factors such as diet and physical activity, sleep and mental health have been explored as possible mediators of diabetes risk. 
+  With over 34 million Americans, or more than 1 in 10, diagnosed with the condition, diabetes is one of the most prevalent chronic diseases in the US.$^1$ Diagnosed diabetics face an overall 60% greater risk of early death than non-diabetics, underlining the importance of identifying the most potent risk factors.$^2$ In addition to other modifiable factors such as diet and physical activity, sleep and mental health have been explored as possible mediators of diabetes risk. 
     
-  Several studies examining sleep and diabetes determined both short (<6 hrs) and long (>8 hrs) sleep duration to be as strongly associated with diabetes risk as traditional risk factors, such as family history of diabetes and overweightness.[^3][^4] Furthermore, a meta-analysis reported that individuals with depression are 37% more likely to develop type 2 diabetes than their depression-free counterparts.[^5] Another review found that this increased risk varied between sexes.[^6]
+  Several studies examining sleep and diabetes determined both short (<6 hrs) and long (>8 hrs) sleep duration to be as strongly associated with diabetes risk as traditional risk factors, such as family history of diabetes and overweightness.$^3$$^4$ Furthermore, a meta-analysis reported that individuals with depression are 37% more likely to develop type 2 diabetes than their depression-free counterparts.$^5$ Another review found that this increased risk varied between sexes.$^6$
     
   Despite having well-established relationships with diabetes independently, sleep and depression have not been thoroughly examined simultaneously as predictors of the condition. Because lack of sleep could contribute to depression, and depression could also affect sleep patterns, a potential interaction effect between sleep and depression may be of interest when analyzing the relationship between sleep and diabetes risk. In this report we examine sleep and depression in tandem to diabetes risk.
 
@@ -255,14 +255,14 @@ Daily/weekly depression was a significant predictor of depression in the overall
   
 ## References
 
-[^1]: “Diabetes | Social Media | Resource Center | Diabetes | CDC,” February 13, 2020. https://www.cdc.gov/diabetes/library/socialmedia/infographics/diabetes.html.
+1. “Diabetes | Social Media | Resource Center | Diabetes | CDC,” February 13, 2020. https://www.cdc.gov/diabetes/library/socialmedia/infographics/diabetes.html.
 
-[^2]: Anothaisintawee, Thunyarat, Sirimon Reutrakul, Eve Van Cauter, and Ammarin Thakkinstian. “Sleep Disturbances Compared to Traditional Risk Factors for Diabetes Development: Systematic Review and Meta-Analysis.” Sleep Medicine Reviews 30 (2016): 11–24. https://doi.org/10.1016/j.smrv.2015.10.002.
+2. Anothaisintawee, Thunyarat, Sirimon Reutrakul, Eve Van Cauter, and Ammarin Thakkinstian. “Sleep Disturbances Compared to Traditional Risk Factors for Diabetes Development: Systematic Review and Meta-Analysis.” Sleep Medicine Reviews 30 (2016): 11–24. https://doi.org/10.1016/j.smrv.2015.10.002.
 
-[^3]: Cappuccio, Francesco P., Lanfranco D’Elia, Pasquale Strazzullo, and Michelle A. Miller. “Quantity and Quality of Sleep and Incidence of Type 2 Diabetes: A Systematic Review and Meta-Analysis.” Diabetes Care 33, no. 2 (February 2010): 414–20. https://doi.org/10.2337/dc09-1124.
+3. Cappuccio, Francesco P., Lanfranco D’Elia, Pasquale Strazzullo, and Michelle A. Miller. “Quantity and Quality of Sleep and Incidence of Type 2 Diabetes: A Systematic Review and Meta-Analysis.” Diabetes Care 33, no. 2 (February 2010): 414–20. https://doi.org/10.2337/dc09-1124.
 
-[^4]: Cappuccio, Francesco P., and Michelle A. Miller. “Sleep and Cardio-Metabolic Disease.” Current Cardiology Reports 19, no. 11 (2017). https://doi.org/10.1007/s11886-017-0916-0.
+4. Cappuccio, Francesco P., and Michelle A. Miller. “Sleep and Cardio-Metabolic Disease.” Current Cardiology Reports 19, no. 11 (2017). https://doi.org/10.1007/s11886-017-0916-0.
 
-[^5]: Holt, Richard I. G., Mary de Groot, and Sherita Hill Golden. “Diabetes and Depression.” Current Diabetes Reports 14, no. 6 (June 2014): 491. https://doi.org/10.1007/s11892-014-0491-3.
+5. Holt, Richard I. G., Mary de Groot, and Sherita Hill Golden. “Diabetes and Depression.” Current Diabetes Reports 14, no. 6 (June 2014): 491. https://doi.org/10.1007/s11892-014-0491-3.
 
-[^6]: Ogilvie, Rachel P., and Sanjay R. Patel. “The Epidemiology of Sleep and Diabetes.” Current Diabetes Reports 18, no. 10 (August 17, 2018): 82. https://doi.org/10.1007/s11892-018-1055-8.
+6. Ogilvie, Rachel P., and Sanjay R. Patel. “The Epidemiology of Sleep and Diabetes.” Current Diabetes Reports 18, no. 10 (August 17, 2018): 82. https://doi.org/10.1007/s11892-018-1055-8.

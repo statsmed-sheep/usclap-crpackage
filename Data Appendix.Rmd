@@ -2,7 +2,8 @@
 title: "Data Appendix"
 author: "Clara Li and Rose Porta"
 date: "5/2/2020"
-output: html_document
+output:
+  pdf_document: default
 ---
 ```{r}
 # NOTE: To load data, you must download both the extract's data and the DDI
@@ -127,6 +128,7 @@ tally(~DEPFREQ, data = data)
 ```{r}
 favstats(~years, data = data)
 ```
+
 ```{r}
 tally(~chronic, data = data)
 ```
@@ -233,7 +235,6 @@ ggplot(data2, aes(x = HRSLEEP, y = years))+
   facet_grid(col=vars(RACEA), labeller=labeller(RACEA = race_labels))
 ```
 
-
 ```{r}
 # Facet scatterplot by depfreq_often
 ggplot(data2, aes(x = HRSLEEP, y = years))+
@@ -242,6 +243,7 @@ ggplot(data2, aes(x = HRSLEEP, y = years))+
   facet_wrap(~depfreq_often) +
   geom_smooth(method = lm, se = FALSE)
 ```
+
 ```{r}
 # Facet scatterplot by depfreq_monthly
 ggplot(data2, aes(x = HRSLEEP, y = years))+
@@ -263,6 +265,7 @@ ggplot(data2, aes(x = depfreq_often, y = HRSLEEP)) +
   geom_jitter() +
   geom_smooth(method = lm, se = FALSE)
 ```
+
 ```{r}
 ggplot(data2, aes(x = depfreq_monthly, y = HRSLEEP)) +
   geom_point(alpha = 0.1) + 
@@ -318,9 +321,11 @@ tally(~health_binary, data = data)
 tally(~depfreq_often, data = data)
 tally(~depfreq_monthly, data = data)
 ```
+
 ```{r}
 favstats(~years, data = data)
 ```
+
 ```{r}
 tally(~chronic, data = data)
 ```

@@ -1,6 +1,5 @@
 ---
 title: "Data Analysis & Modelling"
-author: "Rose Porta and Clara Li"
 date: "05/16/2020"
 output: html_document
 ---

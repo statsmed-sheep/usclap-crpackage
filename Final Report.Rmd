@@ -1,5 +1,5 @@
 ---
-title: "Exploring a model between sleep and chronic diabetes, with mediation by depression frequency and sex"
+title: "The association between sleep and chronic diabetes"
 author: "Rose Porta and Clara Li"
 date: "06/26/2020"
 output:
@@ -25,8 +25,8 @@ opts_chunk$set(
 ```
 
 ## Abstract
-The purpose of our analysis is to investigate the interaction between sleep and depression frequency by sex as risk factors for diabetes, contributing to the existing research that has established each of these risk factors independently. Using 2018 National Health Interview Survey data from the IPUMS database, we fit four logistic regression models with diabetes status as the response. Although our results in relation to sleep were inconclusive, daily or weekly depression was found to be a significant predictor of diabetes risk, particularly for women. This research adds to the growing evidence of a link between mental and physical health.
 
+  The purpose of our analysis is to investigate the interaction between sleep and depression frequency by sex as risk factors for diabetes, contributing to the existing research that has established each of these risk factors independently. Using 2018 National Health Interview Survey data from the IPUMS database, we fit four logistic regression models with diabetes status as the response. Although our results in relation to sleep were inconclusive, daily or weekly depression was found to be a significant predictor of diabetes risk, particularly for women. This research adds to the growing evidence of a link between mental and physical health.
 
 \newpage
 
@@ -56,7 +56,6 @@ The purpose of our analysis is to investigate the interaction between sleep and 
     
   In order to test the significance of each coefficient, we performed individual z-tests. In order to evaluate and compare the overall models, we performed likelihood ratio tests and calculated the percentage of concordant pairs for each model. 
 
-
 ## Results
 
   After filtering out non-applicable observations, we performed our analysis with a sample size of 21,229, with 46.4% males and a median age of 51 years. 1.9% (n = 407) of the individuals in the sample are classified as having chronic diabetes. The median number of hours of sleep per night is 7. The majority of individuals (83.78%) reported experiencing depression rarely, with 6.48% experiencing depression monthly, and 10.21% daily or weekly. The median BMI is 27.11, and the median activity score is 896. The income distribution is fairly even, with 38.54% classified as high income, 28.61% classified as middle income, and 32.87% classified as low income. The majority of individuals (81.09%) identified as white, with 5.51% identifying as Asian, 11.97% identifying as black, and 1.43% identifying as Native American or Alaska Native. 
@@ -66,10 +65,10 @@ The purpose of our analysis is to investigate the interaction between sleep and 
 ## Discussion
 
   Our analysis aimed to assess the relationship between sleep duration and depression in relation to diabetes risk. As shown by the figures below, there is no clear relationship between sleep and diabetes for either sex after accounting for the covariates (figures 1.1 - 1.3). However, if we do not account for the covariates, we see a clear positive relationship between hours of sleep and the probability of having chronic diabetes, which is surprising because the majority of the literature has shown a negative relationship between these two variables (figure 1.4). When considering our secondary explanatory variable, depression frequency, the patterns also appear random when accounting for the covariates.  Without the covariates, it is clear that experiencing depression often is associated with a much higher probability of having diabetes compared to experiencing depression monthly or rarely. This observation supports our hypothesis as well as the pre-existing literature.
+
+  The lack of significance for sleep duration was surprising and initially appeared to not match previous findings on sleep and diabetic risk. However, several studies have reported that while sleep duration is a significant predictor of diabetes, short and long sleeping times are both associated with higher risk, suggesting a U-shaped relationship between sleep and diabetes. This non-linear relationship was not taken into account during our analysis and is likely the reason for sleep duration’s insignificance.
   
-The lack of significance for sleep duration was surprising and initially appeared to not match previous findings on sleep and diabetic risk. However, several studies have reported that while sleep duration is a significant predictor of diabetes, short and long sleeping times are both associated with higher risk, suggesting a U-shaped relationship between sleep and diabetes. This non-linear relationship was not taken into account during our analysis and is likely the reason for sleep duration’s insignificance.
-  
-Daily/weekly depression was a significant predictor of depression in the overall population; when analyzed separately by sex, this variable was found to be significant only for women. This finding corroborates previous literature documenting sex differencs in rates of depression among diabetics.
+  Daily/weekly depression was a significant predictor of depression in the overall population; when analyzed separately by sex, this variable was found to be significant only for women. This finding corroborates previous literature documenting sex differencs in rates of depression among diabetics.
 
 ## Probability of Having Diabetes by Sleep and Depression Frequency
 
@@ -87,7 +86,6 @@ library(ggpubr)
 ```
 
 ```{r}
-
 # Fit full logistic model
 model_full <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
 
@@ -116,12 +114,12 @@ preds_full <- augment(x=model_full, type.predict = "response") %>%
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
-probs_full<- preds_full %>%
+probs_full <- preds_full %>%
   select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
 ```
 
 ```{r, warning = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
+# code from Logistic Regression visualization practice activity 4/20/20
 probs_full <- probs_full %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
@@ -141,7 +139,6 @@ p1 <- ggplot(probs_full, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_of
   theme(text = element_text(size = 8))
 ```
 
-
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_women <- augment(x=model_women, type.predict = "response") %>%
@@ -154,7 +151,7 @@ probs_women <- preds_women %>%
 ```
 
 ```{r, warning = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
+# code from Logistic Regression visualization practice activity 4/20/20
 probs_women <- probs_women %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
@@ -174,7 +171,6 @@ p2 <- ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_o
   theme(text = element_text(size = 8))
 ```
 
-
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_men <- augment(x=model_men, type.predict = "response") %>%
@@ -187,7 +183,7 @@ probs_men <- preds_men %>%
 ```
 
 ```{r, warning = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
+# code from Logistic Regression visualization practice activity 4/20/20
 probs_men <- probs_men %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
@@ -208,7 +204,6 @@ p3 <- ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_oft
   
 ```
 
-
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_simple <- augment(x=model_simple, type.predict = "response") %>%
@@ -221,7 +216,7 @@ probs_simple <- preds_simple %>%
 ```
 
 ```{r, warning = FALSE, message = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
+# code from Logistic Regression visualization practice activity 4/20/20
 probs_simple <- probs_simple %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
@@ -240,18 +235,23 @@ p4 <- ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_
            color = "Depression Frequency") +
         theme_bw() + 
   theme(text = element_text(size = 8))
-  
-  
 ```
 
 ```{r}
-plots_combined <- ggarrange(p1, p2, p3, p4,
-          ncol = 2, nrow = 2,
-          common.legend = TRUE, legend = "bottom",
-          widths = 400, heights = 400)
-plots_combined
-```
+# # Figure 1. Simple and full model
+# plots_combined1 <- ggarrange(p4, p1,
+#           ncol = 2, nrow = 1,
+#           common.legend = TRUE, legend = "bottom",
+#           widths = 400, heights = 400)
+# plots_combined1
 
+# # Figure 2. Full model, by sex
+# plots_combined2 <- ggarrange(p2, p3,
+#           ncol = 2, nrow = 1,
+#           common.legend = TRUE, legend = "bottom",
+#           widths = 400, heights = 400)
+# plots_combined2
+```
 
 #### Limitations
 

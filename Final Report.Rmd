@@ -238,19 +238,19 @@ p4 <- ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_
 ```
 
 ```{r}
-# # Figure 1. Simple and full model
-# plots_combined1 <- ggarrange(p4, p1,
-#           ncol = 2, nrow = 1,
-#           common.legend = TRUE, legend = "bottom",
-#           widths = 400, heights = 400)
-# plots_combined1
+ # Figure 1. Simple and full model
+ plots_combined1 <- ggarrange(p4, p1,
+           ncol = 2, nrow = 1,
+           common.legend = TRUE, legend = "bottom",
+           widths = 400, heights = 400)
+ plots_combined1
 
-# # Figure 2. Full model, by sex
-# plots_combined2 <- ggarrange(p2, p3,
-#           ncol = 2, nrow = 1,
-#           common.legend = TRUE, legend = "bottom",
-#           widths = 400, heights = 400)
-# plots_combined2
+ # Figure 2. Full model, by sex
+ plots_combined2 <- ggarrange(p2, p3,
+           ncol = 2, nrow = 1,
+           common.legend = TRUE, legend = "bottom",
+           widths = 400, heights = 400)
+ plots_combined2
 ```
 
 #### Limitations

@@ -3,7 +3,7 @@ title: "Data Appendix"
 author: "Clara Li and Rose Porta"
 date: "5/2/2020"
 output:
-  pdf_document: default
+  html_document: default
 ---
 ```{r}
 # NOTE: To load data, you must download both the extract's data and the DDI
@@ -329,4 +329,25 @@ favstats(~years, data = data)
 ```{r}
 tally(~chronic, data = data)
 ```
+
+
+# Tables for results section
+
+```{r}
+# code from https://cran.r-project.org/web/packages/qwraps2/vignettes/summary-statistics.html#count-and-percentages
+
+our_summary1 <-
+  list("Hours of Sleep" =
+       list("min" = ~ min(.data$HRSLEEP),
+            "max" = ~ max(.data$HRSLEEP),
+            "mean (sd)" = ~ qwraps2::mean_sd(.data$HRSLEEP))
+      
+       )
+  
+```
+
+```{r}
+
+```
+
 

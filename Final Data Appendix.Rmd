@@ -1,0 +1,40 @@
+---
+title: "Final Data Appendix"
+author: "Rose Porta and Clara Li"
+date: "6/6/2020"
+output: pdf_document
+---
+
+## Checking Regression Assumptions: 
+
+# Linearity
+
+The empirical logit plot seems approximately linear.
+
+```{r, warning = FALSE, message = FALSE}
+# Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
+data_bin <- data %>%
+  # Break HRSLEEP into 10 bins
+  mutate(HRSLEEP_group = cut(HRSLEEP, breaks=10)) %>% 
+  group_by(HRSLEEP_group) %>%
+  # calculate mean HRSLEEP value and proportion obese in each bin
+  mutate(binned.y = mean(chronic), binned.x = mean(HRSLEEP)) %>% 
+  # transform binned.y from proportion to log(odds)
+  mutate(binned.y_logit = logit(binned.y))
+
+# Create plot of log(odds) verus age
+ggplot(data_bin, aes(x = binned.x, y = binned.y_logit)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = FALSE)
+```
+## Randomness
+
+Obviously, individuals are not assigned BMIs by a spinner model, but since we have a random sample, the randomness assumption is met.
+
+## Independence
+
+As established above for the linear regression model, the independence assumption is reasonable for this data set.
+
+```{r}
+data.cor = cor(data)
+```

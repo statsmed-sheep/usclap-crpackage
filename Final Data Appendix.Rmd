@@ -7,7 +7,7 @@ output: pdf_document
 
 ## Checking Regression Assumptions: 
 
-# Linearity 
+# Linearity
 
 The empirical logit plot seems approximately linear.
 

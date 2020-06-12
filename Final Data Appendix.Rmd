@@ -5,13 +5,22 @@ date: "6/6/2020"
 output: pdf_document
 ---
 
+```{r, include = FALSE, warning = FALSE, message = FALSE, options(tinytex.verbose = TRUE)}
+library(tidyverse)
+library(stats)
+library(knitr)
+data <- read.csv("data.csv")
+# Defining logit function (got an error before)
+logit <- qlogis
+```
+
 ## Checking Regression Assumptions: 
 
 # Linearity
 
 The empirical logit plot seems approximately linear.
 
-```{r, warning = FALSE, message = FALSE}
+```{r, include = FALSE, warning = FALSE, message = FALSE}
 # Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
 data_bin <- data %>%
   # Break HRSLEEP into 10 bins
@@ -27,6 +36,7 @@ ggplot(data_bin, aes(x = binned.x, y = binned.y_logit)) +
   geom_point() + 
   geom_smooth(method = lm, se = FALSE)
 ```
+
 ## Randomness
 
 Obviously, individuals are not assigned BMIs by a spinner model, but since we have a random sample, the randomness assumption is met.
@@ -35,6 +45,23 @@ Obviously, individuals are not assigned BMIs by a spinner model, but since we ha
 
 As established above for the linear regression model, the independence assumption is reasonable for this data set.
 
-```{r}
+# Checking Collinearity between Explanatory Variables
+
+```{r, include = FALSE, warning = FALSE, messsage = FALSE}
+data <- data %>% 
+  select(chronic, depfreq_often, depfreq_monthly, HRSLEEP, AGE, BMI, activity_score, SEX,
+         race_asian, race_black, race_na, income_high, income_middle)
 data.cor = cor(data)
+View(data.cor)
 ```
+
+The largest magnitude correlation in the correlation matrix above is 0.50. Collinearity therefore appears to not be a concern.
+
+# Summary Statistics
+
+# Logistic Model Coefficient Summary
+
+```{r, results = 'asis'}
+
+```
+

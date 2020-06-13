@@ -66,7 +66,31 @@ round_data(data.cor, 3)
 
 The largest magnitude correlation in the correlation matrix above is 0.50. Collinearity therefore appears to not be a concern.
 
-# Summary Statistics
+# Summary Statistics (Post- data wrangling)
+
+```{r, echo = FALSE, results = 'asis'}
+variable <- c("HRSLEEP", "BMI", "AGE", "activity_score")
+min <- c("1", "14.98", "18", "17")
+max <- c("22", "85.78", "85 (top coded)", "1615")
+median <- c(7, 27.11, 51, 896)
+mean <- c(7.069339, 28.17239, 50.85831, 862.1115)
+std_dev <- c(1.421356, 6.379732, 18.18446, 593.6359)
+
+df_numeric <- data.frame(variable, min, max, median, mean, std_dev)
+df_numeric <- xtable(df_numeric)
+print.xtable(df_numeric)
+```
+
+```{r, echo = FALSE, results = 'asis'}
+variable <- c("chronic", "depfreq_often", "depfreq_monthly", "SEX", "income_high", "income_middle", "race_black", "race_asian", "race_na")
+yes <- c("407 (1.9%)", "2167 (10.21%)", "1376 (6.48%)", "(female) 11369 (53.6%)", "8181 (38.54%)", "6073 (28.61%)", "2542 (11.97%)", "1169 (5.51%)", "303 (1.43%)")
+no <- c("20822 (98.1%)", "19062 (89.79%) ", "19853 (93.52%)", "(male) 9860 (46.4%)", "13048 (61.46%) ", "15156 (71.39%)", "18687 (88.03%)", "20060 (94.49%)", "20926 (98.57%)")
+
+df_categorical <- data.frame(variable, yes, no)
+df_numeric <- xtable(df_categorical)
+print.xtable(df_categorical)
+```
+
 
 # Full Logistic Model Coefficient Summary
 

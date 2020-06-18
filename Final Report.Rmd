@@ -1,7 +1,5 @@
 ---
 title: "The association between sleep and chronic diabetes"
-author: "Rose Porta and Clara Li"
-date: "06/26/2020"
 output:
   pdf_document: default
 editor_options:
@@ -40,17 +38,17 @@ opts_chunk$set(
 
 ## Methods 
 
-#### Data
+### Data
 
   This study uses data from IPUMS-NHIS, the National Health Interview Survey from 2018. The data was collected by obtaining a random sample of 35,000 U.S. households and randomly selecting one adult and one child (if any were present) from each. Data analysis was restricted to those 18 years and older. An observational unit comprised of an individual adult in the U.S. surveyed by the CDC’s National Center for Health Statistics. The population to which we intend to generalize our analysis is the non institutionalized adult population of the United States (roughly 300 million individuals total).
 
-#### Variables
+### Variables
 
   The variables in our analysis include a binary response variable indicating whether or not an individual has diabetes, with average number of hours of sleep per night as the primary explanatory variable, a three-level categorical variable for the frequency an individual reports experiencing depression as the secondary explanatory variable, and sex as the tertiary explanatory variable. The three levels for depression frequency are “often” (defined as daily or weekly), “monthly”, and “rarely” (defined as a few times a year or never). In order to include this categorical variable in our model, we separated it into two binary variables for being depressed monthly or not and being depressed often or not, with being depressed rarely as the reference group. 
     
   Our covariates include age, BMI, activity level, income, and race. We created a numerical variable for activity score using the Oncology Nursing Society formula Weekly leisure activity score = (9 × Strenuous) + (5 × Moderate) + (3 × Light) from the Godin Leisure-Time Exercise Questionnaire. We substituted strength exercise for light exercise due to the availability of the IPUMS data, and we think strength training is analogous to light exercise for the purposes of our analysis. For simplicity and based on an analysis of faceted scatterplots, we collapsed the categorical race variable into 3 binary variables indicating black/African American or not, Asian or not, and Native American/Alaska Native or not, with white race as the reference group. For income level, we created two binary variables indicating high income (annual family income over \$75,000 or not) and middle income (annual family income between \$35,000 and \$75,000 or not), with low income (annual family income below \$35,000) as the reference group. Since our data is based on survey responses, all values are self-reported. Additionally, we did not include in our analysis any values that corresponded to non-response, inavailability, or extreme values that had been top or bottom coded.
     
-#### Analysis
+### Analysis
 
   In order to analyze our primary, secondary, and tertiary hypothesis, we fit 4 different logistic regression models with the binary variable for diabetes or not as the response. Our first model includes only our primary and secondary explanatory variables in order to observe these relationships without accounting for the covariates. Our second model includes all of our explanatory variables and covariates, including the interaction terms between hours of sleep and depression frequency. Our third and fourth models represent males and females separately in order to observe differences by sex. Both include all covariates. 
     
@@ -246,11 +244,11 @@ p4 <- ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_
 plots_combined
 ```
 
-#### Limitations
+### Limitations
 
   The limitations of our analysis include the inability to account for additional covariates including diet, genetics, sleep quality and other health conditions, as well as the fact that all values are self-reported, which could result in less accurate data. Future analyses should take into account the fact that abundant literature has identified both short and long sleep as significant risk factors for diabetes. Our analysis was focused on short sleep, but it could be beneficial to divide the numerical sleep variable into categories in order to compare the individual relationships of short, average, and long sleep with diabetes risk. Furthermore, we cannot draw any causal inferences due to the nature of the data. Future studies in a controlled setting ought to examine the direction of the relationship between diabetes, sleep, and depression.
 
-#### Conclusion
+### Conclusion
 
   Although our findings in relation to sleep were somewhat inconclusive, it is clear from our analysis that experiencing depression daily or weekly is significantly associated with developing chronic diabetes, particularly for women. This research adds to the growing evidence of a link between mental and physical health.
 

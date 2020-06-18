@@ -1,7 +1,5 @@
 ---
 title: "Final Data Appendix"
-author: "Rose Porta and Clara Li"
-date: "6/6/2020"
 output: pdf_document
 ---
 
@@ -10,9 +8,12 @@ library(tidyverse)
 library(stats)
 library(knitr)
 library(xtable)
+
 data <- read.csv("data.csv")
 # Defining logit function (got an error before)
 logit <- qlogis
+options(xtable.comment = FALSE)
+options(tinytex.verbose = TRUE)
 ```
 
 # Checking Regression Assumptions
@@ -21,7 +22,7 @@ logit <- qlogis
 
 The empirical logit plot seems approximately linear.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, out.width = "60%"}
 # Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
 data_bin <- data %>%
   # Break HRSLEEP into 10 bins
@@ -46,9 +47,11 @@ Obviously, individuals are not assigned BMIs by a spinner model, but since we ha
 
 As established above for the linear regression model, the independence assumption is reasonable for this data set.
 
+\newpage
+
 # Checking Collinearity between Explanatory Variables
 
-```{r, echo = FALSE, warning = FALSE, messsage = FALSE}
+```{r, echo = FALSE, warning = FALSE, messsage = FALSE, results = 'asis'}
 data <- data %>% 
   select(chronic, depfreq_often, depfreq_monthly, HRSLEEP, AGE, BMI, activity_score, SEX,
          race_asian, race_black, race_na, income_high, income_middle)
@@ -61,12 +64,20 @@ round_data <- function(x, digits) {
     x[numeric_columns] <-  round(x[numeric_columns], digits)
     x
 }
-round_data(data.cor, 3)
+df_round <- data.frame(round_data(data.cor, 3))
+df_round1 <- df_round[, c("chronic", "depfreq_often", "depfreq_monthly", "HRSLEEP", "AGE", "BMI", "activity_score")]
+df_round2 <- df_round[, c("SEX", "race_asian", "race_black", "race_na", "income_high", "income_middle")]
+df_table1 <- xtable(df_round1)
+df_table2 <- xtable(df_round2)
+print.xtable(df_table1)
+print.xtable(df_table2)
 ```
 
 The largest magnitude correlation in the correlation matrix above is 0.50. Collinearity therefore appears to not be a concern.
 
-# Summary Statistics (Post- data wrangling)
+\newpage
+
+# Summary Statistics (Post-data wrangling)
 
 ```{r, echo = FALSE, results = 'asis'}
 variable <- c("HRSLEEP", "BMI", "AGE", "activity_score")
@@ -84,13 +95,12 @@ print.xtable(df_numeric)
 ```{r, echo = FALSE, results = 'asis'}
 variable <- c("chronic", "depfreq_often", "depfreq_monthly", "SEX", "income_high", "income_middle", "race_black", "race_asian", "race_na")
 yes <- c("407 (1.9%)", "2167 (10.21%)", "1376 (6.48%)", "(female) 11369 (53.6%)", "8181 (38.54%)", "6073 (28.61%)", "2542 (11.97%)", "1169 (5.51%)", "303 (1.43%)")
-no <- c("20822 (98.1%)", "19062 (89.79%) ", "19853 (93.52%)", "(male) 9860 (46.4%)", "13048 (61.46%) ", "15156 (71.39%)", "18687 (88.03%)", "20060 (94.49%)", "20926 (98.57%)")
+no <- c("20822 (98.1%)", "19062 (89.79%) ", "19853 (93.52%)", "(male) 9860 (46.4%)", "13048 (61.46%)", "15156 (71.39%)", "18687 (88.03%)", "20060 (94.49%)", "20926 (98.57%)")
 
 df_categorical <- data.frame(variable, yes, no)
-df_numeric <- xtable(df_categorical)
+df_categorical <- xtable(df_categorical)
 print.xtable(df_categorical)
 ```
-
 
 # Full Logistic Model Coefficient Summary
 
@@ -106,9 +116,9 @@ df <- xtable(df)
 print.xtable(df)
 ```
 
-* = significant at the 0.01 level
+** = significant at the 0.01 level
 
-# Likelihood Ratio Test Results
+# Likelihood Ratio Test
 
 ```{r, echo = FALSE, results = 'asis'}
 model <- c("Full", "Control")
@@ -119,6 +129,5 @@ p_val <- c("--", "<2.2e-16")
 
 lrdata <- data.frame(model, degf, log_likelihood, chisq, p_val)
 lrdata <- xtable(lrdata)
-print.xtable(lrdata)
+print.xtable(lrdata, floating = FALSE)
 ```
-

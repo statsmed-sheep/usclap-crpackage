@@ -14,15 +14,30 @@ library(gtools)
 # Logistic Model
 ```{r}
 # Fit full logistic model
-model_full <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+
+# Original without transformed sleep
+# AIC score: 3300.2
+model_og <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+
+summary(model_og)
+
+# New with transformed sleep, excluding interaction with the original sleep variable
+# AIC score: 3297.7
+model_full <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
 
 summary(model_full)
+
+# Another model also using transformed sleep, including interaction with the original sleep variable
+# AIC score: 3301.3
+model_other <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+
+summary(model_other)
 
 # Data 1: only women
 data1 <- data %>% 
   filter(SEX == 1)
 
-model_women <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
+model_women <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
 
 summary(model_women)
 
@@ -35,7 +50,7 @@ summary(model_women)
 data2 <- data %>% 
   filter(SEX == 0)
 
-model_men <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
+model_men <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
 
 summary(model_men)
 

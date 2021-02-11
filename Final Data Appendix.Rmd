@@ -1,5 +1,5 @@
 ---
-title: "Final Data Appendix"
+title: "Data Appendix"
 output: pdf_document
 ---
 
@@ -33,7 +33,7 @@ data_bin <- data %>%
   # transform binned.y from proportion to log(odds)
   mutate(binned.y_logit = logit(binned.y))
 
-# Create plot of log(odds) verus age
+# Create plot of log(odds) versus age
 ggplot(data_bin, aes(x = binned.x, y = binned.y_logit)) +
   geom_point() + 
   geom_smooth(method = lm, se = FALSE)
@@ -106,7 +106,7 @@ print.xtable(df_categorical)
 
 ```{r, echo = FALSE, results = 'asis'}
 coeff <- c("HRSLEEP", "depfreq_often**", "depfreq_monthly", "I(HRSLEEP * depfreq_often)", "I(HRSLEEP * depfreq_monthly)")
-value <- c(1.350e-02, 1.315e+00, 3.321e-01, -5.686e-02, 4.482e-02)
+value <- c(1.013591536, 3.724750985, 1.393892231, 0.9447263218, 1.045839592)
 LCI <- c(9.400140e-01, 1.538202e+00, 3.350283e-01, 8.367457e-01, 8.600010e-01)
 UCI <- c(1.089396e+00, 8.944554e+00, 5.819625e+00, 1.065370e+00, 1.257594e+00)
 p_val <- c(0.72002, 0.00341, 0.64860, 0.35585, 0.64349)

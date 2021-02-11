@@ -1,5 +1,5 @@
 ---
-title: "The association between sleep and chronic diabetes"
+title: "Analysis of Sleep and Depression as Risk Factors for Diabetes"
 output:
   pdf_document: default
 editor_options:

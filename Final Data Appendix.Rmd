@@ -18,7 +18,7 @@ options(tinytex.verbose = TRUE)
 
 # Checking Regression Assumptions
 
-## Linearity
+## Linearity - TO BE UPDATED
 
 The empirical logit plot seems approximately linear.
 
@@ -102,7 +102,7 @@ df_categorical <- xtable(df_categorical)
 print.xtable(df_categorical)
 ```
 
-# Full Logistic Model Coefficient Summary
+# Full Logistic Model Coefficient Summary - TO BE UPDATED
 
 ```{r, echo = FALSE, results = 'asis'}
 coeff <- c("HRSLEEP", "depfreq_often**", "depfreq_monthly", "I(HRSLEEP * depfreq_often)", "I(HRSLEEP * depfreq_monthly)")
@@ -118,7 +118,7 @@ print.xtable(df)
 
 ** = significant at the 0.01 level
 
-# Likelihood Ratio Test
+# Likelihood Ratio Test - TO BE UPDATED
 
 ```{r, echo = FALSE, results = 'asis'}
 model <- c("Full", "Control")

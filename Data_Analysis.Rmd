@@ -11,28 +11,31 @@ library(broom)
 library(gtools)
 ```
 
-# Logistic Model
+# MODELS
+
+## Model 1: SIMPLE MODEL
 ```{r}
-# Fit full logistic model
 
-# Original without transformed sleep
-# AIC score: 3300.2
-model_og <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+model_simple <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly, data = data, family = binomial)
 
-summary(model_og)
+summary(model_simple)
 
+# significant coefficients: all
+```
+
+## Model 2: FULL MODEL
+```{r}
 # New with transformed sleep, excluding interaction with the original sleep variable
 # AIC score: 3297.7
 model_full <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
 
 summary(model_full)
+# significant coefficients: sleep, sleep squared, depfreq_often, all covariates
 
-# Another model also using transformed sleep, including interaction with the original sleep variable
-# AIC score: 3301.3
-model_other <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+```
 
-summary(model_other)
-
+## Model 3: FULL WOMEN
+```{r}
 # Data 1: only women
 data1 <- data %>% 
   filter(SEX == 1)
@@ -41,10 +44,17 @@ model_women <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_mo
 
 summary(model_women)
 
+# significant coefficients: depfreq_often, all covariates except race_na
+
 # Results for data1:
 # HRSLEEP significant at 0.10 level, p-value = 0.094166
 # depfreq_often significant at 0.01 level, p-value = 0.003030
 # I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
+```
+
+## Model 4: FULL MEN
+
+```{r}
 
 # Data 2: only men
 data2 <- data %>% 
@@ -54,16 +64,33 @@ model_men <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_mont
 
 summary(model_men)
 
+# significant coefficients: sleep, sleep squared, most covariates
+
 # Result for data2: nothing of interest is significant
 
-# Fit model without confounders
-
-model_simple <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data, family = binomial)
-
-summary(model_simple)
-            
 ```
 
+
+
+```{r}
+# Fit full logistic model
+
+# Original without transformed sleep
+# AIC score: 3300.2
+model_og <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+
+summary(model_og)
+```
+
+
+```{r}
+
+# Another model also using transformed sleep, including interaction with the original sleep variable
+# AIC score: 3301.3
+model_other <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+
+summary(model_other)
+```
 
 ## Checking Regression Assumptions: 
 
@@ -72,6 +99,7 @@ summary(model_simple)
 The empirical logit plot seems approximately linear.
 
 ```{r, warning = FALSE, message = FALSE}
+### NOT SURE IF WE WANT TO CHANGE THIS
 # Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
 data_bin <- data %>%
   # Break HRSLEEP into 10 bins
@@ -118,6 +146,7 @@ lrtest(model_full)
 The $-2log(L)$ values are $-2\cdot -2012.5 = 4025$ and $-2\cdot -1635.1 = 3270.2$ for the null model and full logistic model, respectively. This yields a G-statistic of 24308 - (23600) = 754.8. Compared to a chi-distribution with 14 degrees of freedom, the p-value is less than 2.2e-16, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the multiple logistic regression model based on sleep, depression frequency, and the interaction between sleep and depression frequency is effective at explaining the probability of being diabetic.
 
 ```{r}
+## WHAT IS THIS??
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_full <- augment(x=model_full, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),

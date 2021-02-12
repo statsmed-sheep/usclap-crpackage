@@ -18,28 +18,63 @@ library(broom)
 ```
 
 # Fit Models
+# MODELS
+
+## Model 1: SIMPLE MODEL
 ```{r}
 
-# Fit full logistic model
-model_full <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+model_simple <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly, data = data, family = binomial)
 
+summary(model_simple)
+
+# significant coefficients: all
+```
+
+## Model 2: FULL MODEL
+```{r}
+# New with transformed sleep, excluding interaction with the original sleep variable
+# AIC score: 3297.7
+model_full <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+
+summary(model_full)
+# significant coefficients: sleep, sleep squared, depfreq_often, all covariates
+
+```
+
+## Model 3: FULL WOMEN
+```{r}
 # Data 1: only women
 data1 <- data %>% 
   filter(SEX == 1)
 
-model_women <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
+model_women <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
 
+summary(model_women)
+
+# significant coefficients: depfreq_often, all covariates except race_na
+
+# Results for data1:
+# HRSLEEP significant at 0.10 level, p-value = 0.094166
+# depfreq_often significant at 0.01 level, p-value = 0.003030
+# I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
+```
+
+## Model 4: FULL MEN
+
+```{r}
 
 # Data 2: only men
 data2 <- data %>% 
   filter(SEX == 0)
 
-model_men <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
+model_men <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
 
-# Fit model without confounders
+summary(model_men)
 
-model_simple <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data, family = binomial)
-            
+# significant coefficients: sleep, sleep squared, most covariates
+
+# Result for data2: nothing of interest is significant
+
 ```
 
 ```{r}
@@ -56,6 +91,7 @@ ggplot(data2, aes(x = frequency, y = count, fill = as_factor(chronic))) +
 
 # Full
 ```{r}
+## ERROR .se.fit does not exists
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_full <- augment(x=model_full, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),

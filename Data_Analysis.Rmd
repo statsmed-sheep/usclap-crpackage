@@ -93,9 +93,9 @@ summary(model_og)
 
 The empirical logit plot seems approximately linear.
 
- ```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE}
 ### NOT SURE IF WE WANT TO CHANGE THIS
-# Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
+# Code from 18-simple logistic-lab activity to generate x and y values for plot to check for linearity
 data_bin <- data %>%
   # Break HRSLEEP into 10 bins
   mutate(HRSLEEP_group = cut(HRSLEEP, breaks=10)) %>% 
@@ -110,6 +110,7 @@ ggplot(data_bin, aes(x = binned.x, y = binned.y_logit)) +
   geom_point() + 
   geom_smooth(method = lm, se = FALSE)
 ```
+
 ## Randomness
 
 Obviously, individuals are not assigned BMIs by a spinner model, but since we have a random sample, the randomness assumption is met.
@@ -138,10 +139,10 @@ require(lmtest)
 lrtest(model_full)
 ```
 
-The $-2log(L)$ values are $-2\cdot -2012.5 = 4025$ and $-2\cdot -1635.1 = 3270.2$ for the null model and full logistic model, respectively. This yields a G-statistic of 24308 - (23600) = 754.8. Compared to a chi-distribution with 14 degrees of freedom, the p-value is less than 2.2e-16, which is significant at the alpha = 0.05 level. We therefore reject the null hypothesis and conclude that the multiple logistic regression model based on sleep, depression frequency, and the interaction between sleep and depression frequency is effective at explaining the probability of being diabetic.
+The $-2log(L)$ values are $-2\cdot -2012.5 = 4025$ and $-2\cdot -1632.8 = 3265.6$ for the null model and full logistic model, respectively. This yields a G-statistic of 759.27. Compared to a chi-distribution with 15 degrees of freedom, the p-value is less than 2.2e-16, which is significant at the alpha = 0.001 level. We therefore reject the null hypothesis and conclude that the multiple logistic regression model based on sleep, sleep squared, depression frequency, and the interaction between sleep squared and depression frequency is effective at explaining the probability of being diabetic.
 
 ```{r}
-## WHAT IS THIS??
+## WHAT IS THIS?? IDK MAN
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_full <- augment(x=model_full, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),
@@ -153,51 +154,14 @@ probs_full<- preds_full %>%
 
 library(InformationValue)
 Concordance(probs_full$chronic, probs_full$prob)
-```
-```{r}
-# women
-lrtest(model_women)
-```
 
-```{r}
-# code from Logistic Regression visualization practice activity 4/20/20
-preds_women <- augment(x=model_women, type.predict = "response") %>%
-  mutate(lci=`.fitted`-(1.96*`.se.fit`),
-         uci=`.fitted`+(1.96*`.se.fit`)) %>%
-  rename(prob=`.fitted`)
-
-probs_women <- preds_women %>%
-  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
-
-library(InformationValue)
-Concordance(probs_women$chronic, probs_women$prob)
-```
-
-```{r}
-# men
-lrtest(model_men)
-```
-
-```{r}
-# code from Logistic Regression visualization practice activity 4/20/20
-preds_men <- augment(x=model_men, type.predict = "response") %>%
-  mutate(lci=`.fitted`-(1.96*`.se.fit`),
-         uci=`.fitted`+(1.96*`.se.fit`)) %>%
-  rename(prob=`.fitted`)
-
-probs_men <- preds_men %>%
-  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
-
-library(InformationValue)
-Concordance(probs_men$chronic, probs_men$prob)
+# Percent concordant pairs for full model: 85.7%
 ```
 
 ```{r}
 # no confounders
 lrtest(model_simple)
-```
 
-```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_simple <- augment(x=model_simple, type.predict = "response") %>%
   mutate(lci=`.fitted`-(1.96*`.se.fit`),
@@ -209,4 +173,44 @@ probs_simple <- preds_simple %>%
 
 library(InformationValue)
 Concordance(probs_simple$chronic, probs_simple$prob)
+
+# Percent concordant pairs for simple model: 60.0%
+```
+
+```{r}
+# women
+lrtest(model_women)
+
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_women <- augment(x=model_women, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_women <- preds_women %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+
+library(InformationValue)
+Concordance(probs_women$chronic, probs_women$prob)
+
+# Percent concordant pairs for women model: 85.8%
+```
+
+```{r}
+# men
+lrtest(model_men)
+
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_men <- augment(x=model_men, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_men <- preds_men %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+
+library(InformationValue)
+Concordance(probs_men$chronic, probs_men$prob)
+
+# Percent concordant pairs for men model: 86.3%
 ```

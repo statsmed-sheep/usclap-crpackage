@@ -106,12 +106,12 @@ preds_full <- augment(x=model_full, type.predict = "response") %>%
          uci=`.fitted`+(1.96*`.se.fit`)) %>%
   rename(prob=`.fitted`)
 
-probs_full<- preds_full %>%
+probs_full <- preds_full %>%
   select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
 ```
 
 ```{r, warning = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
+# code from Logistic Regression visualization practice activity 4/20/20
 probs_full <- probs_full %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
@@ -124,6 +124,39 @@ ggplot(probs_full, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))
                       size = .75) +
         labs(title = "Probability of having Diabetes by Sleep and Depression",
           subtitle = "Model 1: Full Model",
+          y = "Probability of having Diabetes", 
+          x = "Hours of Sleep per Night",
+          color = "Depression Frequency") +
+        theme_bw()
+```
+
+# Simple
+```{r}
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_simple <- augment(x=model_simple, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_simple <- preds_simple %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+```
+
+```{r, warning = FALSE, message = FALSE}
+# code from Logistic Regression visualization practice activity 4/20/20
+probs_simple <- probs_simple %>%
+  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
+  group_by(HRSLEEP, depfreq_often) %>%
+  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>% 
+  slice(1)
+
+ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
+      geom_pointrange(aes(ymin = lci, ymax = uci),
+                      position = position_dodge(width = 3),
+                      size = .75) +
+        labs(
+          title = "Probability of having Diabetes by Sleep and Depression",
+          subtitle = "Model 4: Simple",
           y = "Probability of having Diabetes", 
           x = "Hours of Sleep per Night",
           color = "Depression Frequency") +
@@ -144,7 +177,7 @@ probs_women <- preds_women %>%
 ```
 
 ```{r, warning = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
+# code from Logistic Regression visualization practice activity 4/20/20
 probs_women <- probs_women %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
@@ -176,7 +209,7 @@ probs_men <- preds_men %>%
 ```
 
 ```{r, warning = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
+# code from Logistic Regression visualization practice activity 4/20/20
 probs_men <- probs_men %>%
   filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
   group_by(HRSLEEP, depfreq_often) %>%
@@ -190,39 +223,6 @@ ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2)))
         labs(title = "Probability of having Diabetes by Sleep and Depression",
           subtitle = "Model 3: Men Only",
           y = "Probability of having Diabetes",
-          x = "Hours of Sleep per Night",
-          color = "Depression Frequency") +
-        theme_bw()
-```
-
-# No Confounders
-```{r}
-# code from Logistic Regression visualization practice activity 4/20/20
-preds_simple <- augment(x=model_simple, type.predict = "response") %>%
-  mutate(lci=`.fitted`-(1.96*`.se.fit`),
-         uci=`.fitted`+(1.96*`.se.fit`)) %>%
-  rename(prob=`.fitted`)
-
-probs_simple <- preds_simple %>%
-  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
-```
-
-```{r, warning = FALSE, message = FALSE}
-# code from Logistic Regression visualizationpractice activity 4/20/20
-probs_simple <- probs_simple %>%
-  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
-  group_by(HRSLEEP, depfreq_often) %>%
-  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>% 
-  slice(1)
-
-ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
-      geom_pointrange(aes(ymin = lci, ymax = uci),
-                      position = position_dodge(width = 3),
-                      size = .75) +
-        labs(
-          title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 4: Simple",
-          y = "Probability of having Diabetes", 
           x = "Hours of Sleep per Night",
           color = "Depression Frequency") +
         theme_bw()

@@ -1,6 +1,6 @@
 ---
 title: "Data_Visualization"
-author: "Rose Porta"
+author: "Rose Porta and Clara Li"
 date: "5/18/2020"
 output: html_document
 ---
@@ -17,28 +17,38 @@ library(tidyverse)
 library(broom)
 ```
 
-# Fit Models
-# MODELS
+# MODEL FITTING
 
 ## Model 1: SIMPLE MODEL
 ```{r}
-
 model_simple <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly, data = data, family = binomial)
 
 summary(model_simple)
 
 # significant coefficients: all
+
+# Results for simple model:
+# sleep significant at 0.001 level, p-value = 0.000447
+# sleep squared significant at 0.001 level, p-value = 2.05e-06
+# depfreq_often significant at 0.001 level, p-value < 2e-16
+# depfreq_monthly significant at 0.05 level, p-value = 0.011191
 ```
 
 ## Model 2: FULL MODEL
 ```{r}
 # New with transformed sleep, excluding interaction with the original sleep variable
 # AIC score: 3297.7
+
 model_full <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
 
 summary(model_full)
+
 # significant coefficients: sleep, sleep squared, depfreq_often, all covariates
 
+# Results for full model:
+# sleep significant at 0.05 level, p-value = 0.0317
+# sleep squared significant at 0.05 level, p-value = 0.0149
+# depfreq_often significant at 0.001 level, p-value = 1.40e-05
 ```
 
 ## Model 3: FULL WOMEN
@@ -47,34 +57,32 @@ summary(model_full)
 data1 <- data %>% 
   filter(SEX == 1)
 
-model_women <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
+model_women <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
 
 summary(model_women)
 
 # significant coefficients: depfreq_often, all covariates except race_na
 
-# Results for data1:
-# HRSLEEP significant at 0.10 level, p-value = 0.094166
-# depfreq_often significant at 0.01 level, p-value = 0.003030
-# I(HRSLEEP * depfreq_often) significant at 0.05 level, p-value = 0.031241
+# Results for women:
+# depfreq_often significant at 0.01 level, p-value = 0.00145
 ```
 
 ## Model 4: FULL MEN
-
 ```{r}
-
 # Data 2: only men
 data2 <- data %>% 
   filter(SEX == 0)
 
-model_men <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
+model_men <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
 
 summary(model_men)
 
-# significant coefficients: sleep, sleep squared, most covariates
+# significant coefficients: sleep, sleep squared, depfreq_often, most covariates
 
-# Result for data2: nothing of interest is significant
-
+# Result for men:
+# sleep significant at 0.05 level, p-value = 0.02085
+# sleep squared significant at 0.05 level, p-value = 0.01464
+# depfreq_often significant at 0.01 level, p-value = 0.00292
 ```
 
 ```{r}

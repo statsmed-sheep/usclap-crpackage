@@ -125,7 +125,7 @@ ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2
                       size = .75) +
         labs(
           title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 1: Simple",
+          subtitle = "Model 1: Simple Model",
           y = "Probability of having Diabetes", 
           x = "Hours of Sleep per Night",
           color = "Depression Frequency") +
@@ -191,7 +191,7 @@ ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2)
                       position = position_dodge(width = 3),
                       size = .75) +
         labs(title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 2: Women Only",
+          subtitle = "Model 3: Full Model, Women",
           y = "Probability of having Diabetes", 
           x = "Hours of Sleep per Night",
           color = "Depression Frequency") +
@@ -223,7 +223,7 @@ ggplot(probs_men, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2)))
                       position = position_dodge(width = 3),
                       size = .75) +
         labs(title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 3: Men Only",
+          subtitle = "Model 4: Full Model, Men",
           y = "Probability of having Diabetes",
           x = "Hours of Sleep per Night",
           color = "Depression Frequency") +

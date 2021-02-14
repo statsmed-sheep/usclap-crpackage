@@ -85,6 +85,8 @@ summary(model_men)
 # depfreq_often significant at 0.01 level, p-value = 0.00292
 ```
 
+# Bar chart showing counts for depfreq and diabetes status
+
 ```{r}
 data2 <- data %>% 
   group_by(chronic) %>% 
@@ -97,40 +99,7 @@ ggplot(data2, aes(x = frequency, y = count, fill = as_factor(chronic))) +
   geom_col(position = "dodge")
 ```
 
-# Full
-```{r}
-## ERROR .se.fit does not exists
-# code from Logistic Regression visualization practice activity 4/20/20
-preds_full <- augment(x=model_full, type.predict = "response") %>%
-  mutate(lci=`.fitted`-(1.96*`.se.fit`),
-         uci=`.fitted`+(1.96*`.se.fit`)) %>%
-  rename(prob=`.fitted`)
-
-probs_full <- preds_full %>%
-  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
-```
-
-```{r, warning = FALSE}
-# code from Logistic Regression visualization practice activity 4/20/20
-probs_full <- probs_full %>%
-  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
-  group_by(HRSLEEP, depfreq_often) %>%
-  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>%
-  slice(1)
-
-ggplot(probs_full, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
-      geom_pointrange(aes(ymin = lci, ymax = uci),
-                      position = position_dodge(width = 3),
-                      size = .75) +
-        labs(title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 1: Full Model",
-          y = "Probability of having Diabetes", 
-          x = "Hours of Sleep per Night",
-          color = "Depression Frequency") +
-        theme_bw()
-```
-
-# Simple
+# Model 1: Simple
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_simple <- augment(x=model_simple, type.predict = "response") %>%
@@ -156,14 +125,47 @@ ggplot(probs_simple, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2
                       size = .75) +
         labs(
           title = "Probability of having Diabetes by Sleep and Depression",
-          subtitle = "Model 4: Simple",
+          subtitle = "Model 1: Simple",
           y = "Probability of having Diabetes", 
           x = "Hours of Sleep per Night",
           color = "Depression Frequency") +
         theme_bw()
 ```
 
-# Women
+# Model 2: Full
+```{r}
+## ERROR .se.fit does not exists
+# code from Logistic Regression visualization practice activity 4/20/20
+preds_full <- augment(x=model_full, type.predict = "response") %>%
+  mutate(lci=`.fitted`-(1.96*`.se.fit`),
+         uci=`.fitted`+(1.96*`.se.fit`)) %>%
+  rename(prob=`.fitted`)
+
+probs_full <- preds_full %>%
+  select(prob,lci,uci, depfreq_often, depfreq_monthly, HRSLEEP, chronic)
+```
+
+```{r, warning = FALSE}
+# code from Logistic Regression visualization practice activity 4/20/20
+probs_full <- probs_full %>%
+  filter(HRSLEEP %in% c(4, 5, 6, 7, 8, 9, 10)) %>%
+  group_by(HRSLEEP, depfreq_often) %>%
+  mutate(depfreq_often2 = ifelse(depfreq_often == 1, "Often", "Rarely")) %>%
+  slice(1)
+
+ggplot(probs_full, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2))) +
+      geom_pointrange(aes(ymin = lci, ymax = uci),
+                      position = position_dodge(width = 3),
+                      size = .75) +
+        labs(title = "Probability of having Diabetes by Sleep and Depression",
+          subtitle = "Model 2: Full Model",
+          y = "Probability of having Diabetes", 
+          x = "Hours of Sleep per Night",
+          color = "Depression Frequency") +
+        theme_bw()
+```
+
+# Model 3: Full, Women
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_women <- augment(x=model_women, type.predict = "response") %>%
@@ -196,7 +198,7 @@ ggplot(probs_women, aes(y = prob, x = HRSLEEP, color = as.factor(depfreq_often2)
         theme_bw()
 ```
 
-# Men
+# Model 4: Full, Men
 ```{r}
 # code from Logistic Regression visualization practice activity 4/20/20
 preds_men <- augment(x=model_men, type.predict = "response") %>%

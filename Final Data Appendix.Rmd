@@ -26,10 +26,10 @@ The empirical logit plot seems approximately linear.
 # Code from 18-simplelogistic-lab activity to generate x and y values for plot to check for linearity
 data_bin <- data %>%
   # Break HRSLEEP into 10 bins
-  mutate(HRSLEEP_group = cut(HRSLEEP, breaks=10)) %>% 
+  mutate(HRSLEEP_group = cut(I(HRSLEEP^2), breaks=10)) %>% 
   group_by(HRSLEEP_group) %>%
   # calculate mean HRSLEEP value and proportion obese in each bin
-  mutate(binned.y = mean(chronic), binned.x = mean(HRSLEEP)) %>% 
+  mutate(binned.y = mean(chronic), binned.x = mean(I(HRSLEEP^2))) %>% 
   # transform binned.y from proportion to log(odds)
   mutate(binned.y_logit = logit(binned.y))
 

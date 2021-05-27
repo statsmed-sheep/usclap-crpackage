@@ -1,5 +1,5 @@
 ---
-title: "Analysis of Sleep and Depression as Risk Factors for Diabetes"
+title: "Analysis of Sleep and Depression as Sex-Specific Risk Factors for Diabetes"
 output:
   pdf_document: default
 editor_options:
@@ -18,13 +18,13 @@ opts_chunk$set(
   tidy=TRUE,                     # display code as typed
   size="small",                   # slightly smaller font for code
   tidy.opts=list(width.cutoff=65), # wrap text and long comments
-  fig.width=4, fig.height=5           #figure size
+  fig.width=4, fig.height=5           # figure size
 )
 ```
 
 ## Abstract
 
-  The purpose of our analysis is to investigate the interaction between sleep and depression frequency by sex as risk factors for diabetes, contributing to the existing research that has established each of these risk factors independently. Using 2018 National Health Interview Survey data from the IPUMS database, we fit four logistic regression models with diabetes status as the response. We found both sleep and daily or weekly depression to be significant predictors of diabetes in both the full and simple models. However, when separating by sex, we found only depression frequency to be significant for women and only sleep to be significant for men. This research adds to the growing evidence of a link between mental and physical health.
+  The purpose of our analysis is to investigate the interaction between sleep duration and depression frequency by sex as risk factors for diabetes, building on existing research that has established each of these risk factors independently. Using 2018 National Health Interview Survey data from the IPUMS database, we fit four logistic regression models with diabetic/non-diabetic status as the response variable. We found both sleep and daily or weekly depression to be significant predictors of diabetes in a simple model including both men and women and only the variables of interest. Sleep and daily or weekly depression were also significant in a full model including both sexes, all variables of interest and covariates. When analyzed separately by sex, daily or weekly depression frequency was found to be significant for both men and women. Sleep was found to be significant only for men. This research adds to the growing evidence of a link between mental and physical health.
 
 \newpage
 
@@ -82,25 +82,70 @@ library(ggpubr)
 ```
 
 ```{r}
-# Fit full logistic model
-model_full <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+## Model 1: SIMPLE MODEL
+
+model_simple <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly, data = data, family = binomial)
+
+summary(model_simple)
+
+# significant coefficients: all
+
+# Results for simple model:
+# sleep significant at 0.001 level, p-value = 0.000447
+# sleep squared significant at 0.001 level, p-value = 2.05e-06
+# depfreq_often significant at 0.001 level, p-value < 2e-16
+# depfreq_monthly significant at 0.05 level, p-value = 0.011191
+
+
+## Model 2: FULL MODEL
+
+# New with transformed sleep, excluding interaction with the original sleep variable
+# AIC score: 3297.7
+
+model_full <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data)
+
+summary(model_full)
+
+# significant coefficients: sleep, sleep squared, depfreq_often, all covariates
+
+# Results for full model:
+# sleep significant at 0.05 level, p-value = 0.0317
+# sleep squared significant at 0.05 level, p-value = 0.0149
+# depfreq_often significant at 0.001 level, p-value = 1.40e-05
+
+
+## Model 3: FULL WOMEN
 
 # Data 1: only women
 data1 <- data %>% 
   filter(SEX == 1)
 
-model_women <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
+model_women <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data1)
+
+summary(model_women)
+
+# significant coefficients: depfreq_often, all covariates except race_na
+
+# Results for women:
+# depfreq_often significant at 0.01 level, p-value = 0.00145
 
 
-# Data 2: only men The mechanism behind depression being significant only for diabetic women is unclear; it has been proposed that hormonal shifts in women contribute primarily to this disparity. While it 
+## Model 4: FULL MEN
+
+# Data 2: only men
 data2 <- data %>% 
   filter(SEX == 0)
 
-model_men <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly + I(HRSLEEP*depfreq_often) + I(HRSLEEP*depfreq_monthly) + log(AGE) + SEX + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
+model_men <- glm(chronic ~ HRSLEEP + I(HRSLEEP^2) + depfreq_often + depfreq_monthly + I(I(HRSLEEP^2)*depfreq_often) + I(I(HRSLEEP^2)*depfreq_monthly) + log(AGE) + BMI + activity_score + income_high + income_middle + race_asian + race_black + race_na, family = binomial, data = data2)
 
-# Fit model without confounders
+summary(model_men)
 
-model_simple <- glm(chronic ~ HRSLEEP + depfreq_often + depfreq_monthly, data = data, family = binomial)
+# significant coefficients: sleep, sleep squared, depfreq_often, most covariates
+
+# Result for men:
+# sleep significant at 0.05 level, p-value = 0.02085
+# sleep squared significant at 0.05 level, p-value = 0.01464
+# depfreq_often significant at 0.01 level, p-value = 0.00292
 ```
   
 ```{r}

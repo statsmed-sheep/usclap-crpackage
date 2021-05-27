@@ -39,26 +39,6 @@ DEPFREQ != "0", DEPFREQ != "7", DEPFREQ != "8", DEPFREQ != "9",
          FLDIABETNO != "00", FLDIABETNO != "97", FLDIABETNO != "98", FLDIABETNO != "99",
          FLDIABETTP != "7", FLDIABETTP != "8", FLDIABETTP != "9") %>% 
   mutate(SEX = ifelse(SEX == 1, 0, 1))
-
-sleepshort <- data %>% 
-  filter(HRSLEEP < 7)
-
-# 7026 people sleep less than 7 hours
-count(sleepshort)
-
-sleepmoderate <- data %>% 
-  filter(HRSLEEP >= 7 & HRSLEEP <= 9)
-
-# 13,413 people sleep between 7 and 9 hours, inclusive
-count(sleepmoderate)
-
-sleeplong <- data %>% 
-  filter(HRSLEEP > 9)
-
-# 858 people sleep more than 9 hours
-count(sleeplong)
-
-# sleeplong number a concern?
 ```
 
 ```{r}

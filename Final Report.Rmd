@@ -296,7 +296,7 @@ plots_combined
 
 ### Limitations
 
-  The limitations of our analysis include the inability to account for additional covariates including diet, genetics, sleep quality and other health conditions, as well as the fact that all values are self-reported, which could result in less accurate data. Furthermore, we cannot draw any causal inferences due to the nature of the data. Future studies in a controlled setting ought to examine the direction of the relationship between diabetes, sleep, and depression.
+  The limitations of our analysis include the inability to account for additional covariates including diet, genetics, sleep quality and other health conditions, as well as the fact that all values are self-reported, which could result in less accurate data. In particular, diagnosis of depression and diabetes was not verified during data collection. Additionally, although our sample was representative for the US population, more dedicated studies of the relationship between sleep, depression, sex, and diabetes ought to be carried out for minority groups. Transgender individuals experiencing hormone therapies, for instance, might experience changes in sleep and depression that would go on to affect diabetic risk. It could also be useful to account for gender in addition to sex because non-binary individuals likely experience higher rates of depression due to discrimination. Furthermore, we cannot draw any causal inferences due to the nature of the data. Future studies in a controlled setting ought to examine the direction of the relationship between diabetes, sleep, and depression.
 
 ### Conclusion
 

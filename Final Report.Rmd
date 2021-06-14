@@ -28,13 +28,17 @@ opts_chunk$set(
 
 \newpage
 
-## Background and Significance
+## Introduction
 
-  With over 34 million Americans, or more than 1 in 10, diagnosed with the condition, diabetes is one of the most prevalent chronic diseases in the US $^1$. Diagnosed diabetics face an overall 60% greater risk of early death than non-diabetics, underlining the importance of identifying the most potent risk factors $^2$. In addition to other modifiable factors such as diet and physical activity, sleep and mental health have been explored as possible mediators of diabetes risk. 
+With over 34 million Americans, or more than 1 in 10, diagnosed with the condition, diabetes is one of the most prevalent chronic diseases in the US [1]. Diagnosed diabetics face an overall 60% greater risk of early death than non-diabetics, underlining the importance of identifying the most potent risk factors [2]. In addition to other modifiable factors such as diet and physical activity, sleep and mental health have been explored as possible predictors of diabetes risk.
+
+There is a relatively strong consensus among the literature that short sleep (<6 hours) is a significant risk factor of diabetes [2],[3],[4]. Several studies indicate that excessively long sleep (>8 hours) could be a risk factor also, however this finding is less conclusive across the literature [5],[6]. Specifically, a systematic review of 36 studies showed that sleep disturbances, including sleep duration less than 6 hrs, have an effect on diabetes risk comparable to traditional risk factors, such as family history of diabetes and overweightness, and exceeding the risk associated with physical inactivity [2]. Sleep in relation to diabetes risk has also been found to vary between sexes. A systematic search of 10 studies, for instance, found an especially large increase in diabetes risk for men sleeping less than 5-6 hrs compared to women sleeping a similar amount [7]. Several mechanisms explaining sleep’s association with diabetes have been proposed. Shortened or disturbed sleep, for instance, has been linked to the stimulation of cortisol through the hypothalamic-pituitary axis, leading to both increased production of glucose and decreased glucose utilization, and eventually insulin resistance [3], [8]. Short sleep is also thought to increase levels of the inflammatory marker C-reactive protein, which inhibits the binding of leptin and contributes to weight gain and impaired glycemic control [7],[8]. The causal effect of long sleep is considerably more speculative, with some concern that the relationship is purely the result of unidentified confounding bias. Others have shown that long sleep duration elevates inflammatory markers similarly to shortened sleep, making the same inhibited leptin pathway a possibility [6].
+
+Elevated rates of depression have been consistently found among those diagnosed with diabetes and vice-versa, indicating a bidirectional relationship [9],[10],[11]. One study found that among adults with major depression, short sleep (<6.5 hours) and male sex were also significant risk factors [9]. However, another study found that after controlling for baseline covariates, the relationship between depression and diabetes was not significant. This result conflicts with the majority of the literature [3]. This study also included sex, and found that women who do not have depression are more likely to be diagnosed with diabetes than men who do not have depression, but this discrepancy becomes insignificant when both women and men have depression [3]. Other studies found, however, that women were more likely to experience comorbid depression and diabetes, indicating the relationship between sex, depression, and diabetes may be inconsistent and worthy of further exploration [12], [10].
+
+Lastly, short sleep (< 5-7 hrs) has been shown to strongly correlate with increased risk of depression [13], [14], [15], [16], [9]. Excessive sleep is also well-established as a symptom of depression. Sleep and depression are thus closely linked physiologically.
     
-  Several studies examining sleep and diabetes determined both short (<6 hrs) and long (>8 hrs) sleep duration to be as strongly associated with diabetes risk as traditional risk factors, such as family history of diabetes and overweightness $^3$$^4$. Furthermore, a meta-analysis reported that individuals with depression are 37% more likely to develop type 2 diabetes than their depression-free counterparts $^5$. Another review found that this increased risk varied between sexes $^6$.
-    
-  Despite having well-established relationships with diabetes independently, sleep and depression have not been thoroughly examined simultaneously as predictors of the condition. Because disturbed sleep could contribute to depression, and depression could also affect sleep patterns, a potential interaction effect between sleep and depression may be of interest when analyzing the relationship between sleep and diabetes risk. In this report we examine sleep and depression in tandem to diabetes risk.
+Despite having well-established relationships with diabetes independently, sleep and depression have not been thoroughly examined simultaneously as predictors of the condition. Because there is such a clear relationship between sleep and depression as well, a potential interaction effect between sleep and depression may be of interest when analyzing the relationship between sleep and diabetes risk. In this report we examine sleep and depression in tandem to diabetes risk.
 
 ## Methods 
 
@@ -56,15 +60,18 @@ opts_chunk$set(
 
 ## Results
 
-  After filtering out non-applicable observations, we performed our analysis with a sample size of 21,229, with 46.4% males and a median age of 51 years. 1.9% (n = 407) of the individuals in the sample are classified as having chronic diabetes. The median number of hours of sleep per night is 7. The majority of individuals (83.78%) reported experiencing depression rarely, with 6.48% experiencing depression monthly, and 10.21% daily or weekly. The median BMI is 27.11, and the median activity score is 896. The income distribution is fairly even, with 38.54% classified as high income, 28.61% classified as middle income, and 32.87% classified as low income. The majority of individuals (81.09%) identified as white, with 5.51% identifying as Asian, 11.97% identifying as black, and 1.43% identifying as Native American or Alaska Native. 
+  After filtering out non-applicable observations, we performed our analysis with a sample size of 21,229, with 46.4% males and a median age of 51 years. 1.9% (n = 407) of the individuals in the sample are classified as having chronic diabetes. The median number of hours of sleep per night is 7. The majority of individuals (83.78%) reported experiencing depression rarely, with 6.48% experiencing depression monthly, and 10.21% daily or weekly. The median BMI is 27.11, and the median activity score is 896. The income distribution is fairly even, with 38.54% classified as high income, 28.61% classified as middle income, and 32.87% classified as low income. The majority of individuals (81.09%) identify as white, with 5.51% identifying as Asian,11.97% identifying as black, and 1.43% identifying as Native American or Alaskan Native.
 
-  Based on individual z-tests, the coefficients for all explanatory variables were significant for the simple model (model 1) (p < 0.05). For the full model, the coefficients for sleep and daily or weekly depression frequency remained significant, while monthly depression frequency and the interactions between sleep and depression frequency were not significant (model 2). For models 3 and 4 (separated by sex), the coefficient for often depression frequency was found to be significant for both females and males, and the coefficients for sleep were significant only for males (p < 0.05). The likelihood ratio tests for all models yielded significant p-values (p < 0.05) indicating that all four models were significant overall. However, it is clear that the simple model (model 1) is much less accurate than the models including the covariates (models 2-4) as shown by the percentages of concordant pairs: 60.0%, 85.7%, 85.8%, and 86.3% respectively.
+Based on individual z-tests, the coefficients for the simple model (model 1), including both sexes and only the explanatory variables, were all found to be significant (p < 0.05). For the full model including both sexes and all covariates (model 2), the coefficients for sleep and daily or weekly depression frequency remained significant (p < 0.05 and p < 0.001, respectively). Monthly depression frequency and the interactions between sleep and depression frequency were not significant. For both models 3 and 4 (including only females and males, respectively), the coefficient for daily or weekly depression frequency was found to be significant (p < 0.01). The coefficients for sleep were significant only for males (p < 0.05). The likelihood ratio tests for all models yielded significant p-values (p < 0.05), indicating that all four models were effective at explaining the data. However, the simple model (model 1) was relatively less effective than the models including the covariates (models 2-4) according to the percentages of concordant pairs (60.0%, 85.7%, 85.8%, and 86.3% respectively).
+
   
 ## Discussion
 
-  Our analysis aimed to assess the relationship between sleep duration and depression in relation to diabetes risk. In figure 1.1, we see that if we do not account for the covariates, both short (< 7hrs) and long (> 8hrs) sleep are correlated with increased probability having diabetes (figure 1.1). This finding aligns with past studies documenting a U-shaped relationship between sleep duration and diabetes risk. Once we account for the covariates, however, there is no clear relationship between sleep and diabetes for either sex (figures 1.2, 2.1, and 2.2). When considering our secondary explanatory variable, depression frequency, without the covariates it is clear that experiencing depression often is associated with a much higher probability of having diabetes compared to experiencing depression monthly or rarely (figure 1.1). This observation supports our hypothesis as well as the pre-existing literature. However, the patterns appear random when accounting for the covariates.
-  
-  Daily/weekly depression was a significant predictor of depression in the overall population; when analyzed separately by sex, this variable was found to be significant for both men and women. This finding corroborates previous literature documenting sex differences in rates of depression among diabetics.
+  Our analysis aimed to assess the relationship between sleep duration and depression in relation to diabetes risk. Without accounting for covariates, both short (< 7 hrs) and long (> 8 hrs) sleep were clearly correlated with an increased probability of having diabetes (Figure 1.1). This finding aligns with past studies documenting a U-shaped relationship between sleep duration and diabetes risk. After accounting for the covariates, this U-shaped relationship between sleep and diabetes persisted, albeit attenuated, for the overall and men-only samples (Figures 1.2 and 2.2) and disappeared in the women-only sample (Figure 2.1). Without the covariates, experiencing depression daily or weekly was clearly associated with a much higher probability of having diabetes, compared to experiencing depression monthly or rarely (Figure 1.1). This observation supports our hypothesis as well as the pre-existing literature. After controlling for covariates, this association persisted for all three sample groups (Figures 1.2, 2.1, and 2.2).
+
+Our finding that the sleep-diabetes relationship remains significant only for men corroborates a systematic review by Cappuccio et. al, where diminished sleep was more strongly associated with diabetes risk for men compared to women. The reason behind this sex-specific association is not completely clear; however, disturbed sleep has been previously shown to interfere with testosterone in men with T2DM, and given the benefits of testosterone on glucose metabolism, low sleep might conceivably lead to poorer glycemic control [17]. A similar explanation for women and estrogen has yet to be established.
+
+Since sleep disturbance and depression are known to be closely linked, we were surprised that we did not find any significant relationship between the sleep-depression interaction and diabetes risk based on our models. However, one cohort study found short sleep (< 6 hours) to be a significant risk factor of diabetes independent from mental health conditions including depression, which is consistent with our results [3]. This cohort study has the limitation that most of the participants were relatively young and physically fit. Thus, it would be beneficial to do more research on the interaction of sleep and depression in relation to diabetes risk using older folks, as diabetes risk increases with age.  
 
 ## Probability of Having Diabetes by Sleep and Depression Frequency
 
@@ -299,14 +306,37 @@ plots_combined
 
 ## References
 
-1. “Diabetes | Social Media | Resource Center | Diabetes | CDC,” February 13, 2020. https://www.cdc.gov/diabetes/library/socialmedia/infographics/diabetes.html.
+1. A Snapshot: Diabetes In The United States | Diabetes | CDC [Internet]. 2021 [cited 2021 Jun 14]. Available from: https://www.cdc.gov/diabetes/library/socialmedia/infographics/diabetes.html
 
-2. Anothaisintawee, Thunyarat, Sirimon Reutrakul, Eve Van Cauter, and Ammarin Thakkinstian. “Sleep Disturbances Compared to Traditional Risk Factors for Diabetes Development: Systematic Review and Meta-Analysis.” Sleep Medicine Reviews 30 (2016): 11–24. https://doi.org/10.1016/j.smrv.2015.10.002.
+2. Anothaisintawee T, Reutrakul S, Van Cauter E, Thakkinstian A. Sleep disturbances compared to traditional risk factors for diabetes development: Systematic review and meta-analysis. Sleep Medicine Reviews. 2016;30:11–24.
 
-3. Cappuccio, Francesco P., Lanfranco D’Elia, Pasquale Strazzullo, and Michelle A. Miller. “Quantity and Quality of Sleep and Incidence of Type 2 Diabetes: A Systematic Review and Meta-Analysis.” Diabetes Care 33, no. 2 (February 2010): 414–20. https://doi.org/10.2337/dc09-1124.
+3. Boyko EJ, Seelig AD, Jacobson IG, Hooper TI, Smith B, Smith TC, et al. Sleep Characteristics, Mental Health, and Diabetes Risk: A prospective study of U.S. military service members in the Millennium Cohort Study. Diabetes Care. 2013;36(10):3154–61. 
 
-4. Cappuccio, Francesco P., and Michelle A. Miller. “Sleep and Cardio-Metabolic Disease.” Current Cardiology Reports 19, no. 11 (2017). https://doi.org/10.1007/s11886-017-0916-0.
+4. Holliday EG, Magee CA, Kritharides L, Banks E, Attia J. Short Sleep Duration Is Associated with Risk of Future Diabetes but Not Cardiovascular Disease: a Prospective Study and Meta-Analysis. PLoS ONE. 2013;8(11).
 
-5. Holt, Richard I. G., Mary de Groot, and Sherita Hill Golden. “Diabetes and Depression.” Current Diabetes Reports 14, no. 6 (June 2014): 491. https://doi.org/10.1007/s11892-014-0491-3.
+5. Ayas NT, White DP, Al-Delaimy WK, Manson JE, Stampfer MJ, Speizer FE, et al. A Prospective Study of Self-Reported Sleep Duration and Incident Diabetes in Women. Diabetes Care. 2003;26(2):380–4.
 
-6. Ogilvie, Rachel P., and Sanjay R. Patel. “The Epidemiology of Sleep and Diabetes.” Current Diabetes Reports 18, no. 10 (August 17, 2018): 82. https://doi.org/10.1007/s11892-018-1055-8.
+6. Shan Z, Ma H, Xie M, Yan P, Guo Y, Bao W, et al. Sleep Duration and Risk of Type 2 Diabetes: A Meta-analysis of Prospective Studies. Diabetes Care. 2015;38(3):529–37.
+
+7. Cappuccio FP, D'Elia L, Strazzullo P, Miller MA. Quantity and Quality of Sleep and Incidence of Type 2 Diabetes: A systematic review and meta-analysis. Diabetes Care. 2009;33(2):414–20. 
+
+8. Barone MTU, Menna-Barreto L. Diabetes and sleep: A complex cause-and-effect relationship. Diabetes Research and Clinical Practice. 2011 Feb;91(2):129–37.
+
+9. Hein M, Lanquart J-P, Loas G, Hubain P, Linkowski P. Prevalence and Risk Factors of Type 2 Diabetes in Major Depression: A Study on 703 Individuals Referred for Sleep Examinations. Psychosomatics. 2018 Apr;59(2):144–57.
+
+10. Roy T, Lloyd CE. Epidemiology of depression and diabetes: a systematic review. J Affect Disord. 2012 Oct;142 Suppl:S8-21.
+
+11. Campayo A, Gómez-Biel CH, Lobo A. Diabetes and depression. Curr Psychiatry Rep. 2011 Feb;13(1):26–30.
+
+12. The Prevalence of Comorbid Depression in Adults With Diabetes | Diabetes Care [Internet]. [cited 2021 Jun 14]. Available from: https://care.diabetesjournals.org/content/24/6/1069.long
+
+13. Riemann D, Krone LB, Wulff K, Nissen C. Sleep, insomnia, and depression. Neuropsychopharmacol. 2020 Jan;45(1):74–89.
+
+14. Li L, Wu C, Gan Y, Qu X, Lu Z. Insomnia and the risk of depression: a meta-analysis of prospective cohort studies. BMC Psychiatry. 2016 Nov 5;16(1):375.
+
+15. Morssinkhof MWL, van Wylick DW, Priester-Vink S, van der Werf YD, den Heijer M, van den Heuvel OA, et al. Associations between sex hormones, sleep problems and depression: A systematic review. Neuroscience & Biobehavioral Reviews. 2020 Nov 1;118:669–80.
+
+16. Fang H, Tu S, Sheng J, Shao A. Depression in sleep disturbance: A review on a bidirectional relationship, mechanisms and treatment. J Cell Mol Med. 2019 Apr;23(4):2324–32.
+
+17. Wang J, Kwok MK, Au Yeung SL, Li AM, Lam HS, Leung JYY, et al. Sleep duration and risk of diabetes: Observational and Mendelian randomization studies. Preventive Medicine. 2019 Feb;119:24–30.
+
